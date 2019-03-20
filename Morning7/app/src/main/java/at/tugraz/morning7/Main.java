@@ -1,4 +1,8 @@
 package at.tugraz.morning7;
 
-public class Main {
+import android.app.Activity;
+
+public class Main extends Activity
+{
+
 }
