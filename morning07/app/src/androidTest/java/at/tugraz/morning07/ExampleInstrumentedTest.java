@@ -23,4 +23,12 @@ public class ExampleInstrumentedTest {
 
         assertEquals("at.tugraz.morning07", appContext.getPackageName());
     }
+
+    @Test
+    public void createListView()
+    {
+
+    }
+
+
 }
