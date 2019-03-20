@@ -8,7 +8,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name="at.tugraz.morning7.Main">
+        <activity android:name="at.tugraz.morning7.Main" android:exported="true">
 
             <intent-filter>
                 <category android:name="at.tugraz.morning7.Main.LAUNCHER" />
