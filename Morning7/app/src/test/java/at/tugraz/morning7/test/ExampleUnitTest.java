@@ -1,4 +1,4 @@
-package com.example.morning07;
+package at.tugraz.morning7.test;
 
 import org.junit.Test;
 
