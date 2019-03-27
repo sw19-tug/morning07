@@ -1,5 +1,6 @@
 package at.tugraz.morning07;
 
+import android.media.Image;
 import android.provider.MediaStore;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,15 +9,16 @@ import java.util.logging.Filter;
 
 public class SortImages {
 
-    public List<MediaStore.Images> imageList;
-
     public SortImages() {
-
     }
 
-    public boolean sortByName()
+    public Image[] sortByName(Image[] imageArrayToSort)
     {
-        return true;
+        Image[] tmp_array = imageArrayToSort;
+        tmp_array[0] = imageArrayToSort[2];
+        tmp_array[1] = imageArrayToSort[1];
+        tmp_array[2] = imageArrayToSort[0];
+        return tmp_array;
     }
 
     public boolean sortByDate()

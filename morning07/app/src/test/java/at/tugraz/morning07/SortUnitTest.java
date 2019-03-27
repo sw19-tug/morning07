@@ -24,6 +24,8 @@ public class SortUnitTest{
     Image image3;
     Image[] imageArray = {image1, image2, image3};
     Image[] sortedbyNameArray = {image3, image2, image1};
+    Image[] sortedbyDateArray = {image2, image3, image1};
+    Image[] sortedbyFileSizeArray = {image3, image1, image2};
 
     @Before
     public void setUp() throws IOException {
@@ -39,12 +41,12 @@ public class SortUnitTest{
     @Test
     public void sortByDate(){
         assertNotNull(sort);
-        assertTrue(sort.sortByDate());
+        assertEquals(sortedbyDateArray, sort.sortByDate(imageArray));
     }
 
     @Test
     public void sortByFileSize(){
         assertNotNull(sort);
-        assertTrue(sort.sortByFileSize());
+        assertEquals(sortedbyFileSizeArray, sort.sortByFileSize(imageArray));
     }
 }
