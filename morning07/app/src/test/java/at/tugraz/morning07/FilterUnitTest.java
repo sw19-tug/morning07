@@ -39,4 +39,15 @@ public class FilterUnitTest{
         assertTrue(filter.filterByName());
     }
 
+    @Test
+    public void filterByDate(){
+        assertNotNull(filter);
+        assertTrue(filter.filterByDate());
+    }
+
+    @Test
+    public void filterByFileSize(){
+        assertNotNull(filter);
+        assertTrue(filter.filterByFileSize());
+    }
 }
