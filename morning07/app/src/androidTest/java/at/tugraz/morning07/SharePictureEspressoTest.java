@@ -26,6 +26,6 @@ public class SharePictureEspressoTest {
 
     @Test
     public void testButtonVisible() {
-        onView(withId(R.id.buttonShare)).check(matches(isDisplayed()));
+        onView(withId(R.id.shareButton)).check(matches(isDisplayed()));
     }
 }
