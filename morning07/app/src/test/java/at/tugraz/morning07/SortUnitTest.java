@@ -1,15 +1,11 @@
 package at.tugraz.morning07;
 
-import android.graphics.Bitmap;
-import android.media.ExifInterface;
 import android.media.Image;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -20,34 +16,35 @@ import static org.junit.Assert.assertTrue;
 
 
 
-public class FilterUnitTest{
+public class SortUnitTest{
 
-    FilterImages filter;
+    SortImages sort;
     Image image1;
     Image image2;
     Image image3;
     Image[] imageArray = {image1, image2, image3};
+    Image[] sortedbyNameArray = {image3, image2, image1};
 
     @Before
     public void setUp() throws IOException {
-        filter = new FilterImages();
+        sort = new SortImages();
     }
 
     @Test
-    public void filterByName(){
-        assertNotNull(filter);
-        assertTrue(filter.filterByName());
+    public void sortByName(){
+        assertNotNull(sort);
+        assertEquals(sortedbyNameArray, sort.sortByName(imageArray));
     }
 
     @Test
-    public void filterByDate(){
-        assertNotNull(filter);
-        assertTrue(filter.filterByDate());
+    public void sortByDate(){
+        assertNotNull(sort);
+        assertTrue(sort.sortByDate());
     }
 
     @Test
-    public void filterByFileSize(){
-        assertNotNull(filter);
-        assertTrue(filter.filterByFileSize());
+    public void sortByFileSize(){
+        assertNotNull(sort);
+        assertTrue(sort.sortByFileSize());
     }
 }

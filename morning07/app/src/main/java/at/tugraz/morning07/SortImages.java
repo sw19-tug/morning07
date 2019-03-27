@@ -6,15 +6,26 @@ import java.util.List;
 
 import java.util.logging.Filter;
 
-public class FilterImages {
+public class SortImages {
 
     public List<MediaStore.Images> imageList;
 
-    public FilterImages() {
+    public SortImages() {
 
     }
 
-    public boolean filterByName(){
+    public boolean sortByName()
+    {
+        return true;
+    }
+
+    public boolean sortByDate()
+    {
+        return true;
+    }
+
+    public boolean sortByFileSize()
+    {
         return true;
     }
 }
