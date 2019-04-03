@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -44,7 +45,7 @@ public class MainActivityEspressoTest
     @Test
     public void checkGridViewPhotoAdapter()
     {
-        GridView photoGridView = activityRule.getActivity().photoAdapter;
+        GridView photoGridView = activityRule.getActivity().photoGridView;
         assertThat(photoGridView.getAdapter(), instanceOf(PhotoAdapter.class));
     }
 
@@ -64,4 +65,21 @@ public class MainActivityEspressoTest
         assertThat("Photo file paths must not be null.", photoFilesPaths != null);
     }
 
+    @Test
+    public void checkFilePathsIfImages()
+    {
+        File[] photoFiles = activityRule.getActivity().getPhotoFiles();
+        String[] photoFilesPaths = activityRule.getActivity().getPhotoFilesPaths(photoFiles);
+
+        for(int i = 0; i < photoFilesPaths.length; i++)
+        {
+            assertThat("Photo file paths must end with valid endings",
+                    photoFilesPaths[i].endsWith(".gif") ||
+                    photoFilesPaths[i].endsWith(".jpg") ||
+                    photoFilesPaths[i].endsWith(".jpeg") ||
+                    photoFilesPaths[i].endsWith(".png") ||
+                    photoFilesPaths[i].endsWith(".webp"));
+
+        }
+    }
 }
