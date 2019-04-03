@@ -16,18 +16,21 @@ import android.widget.ImageView;
 import java.io.File;
 import java.lang.reflect.Array;
 
+import static android.widget.GridView.AUTO_FIT;
+
 public class PhotoAdapter extends BaseAdapter
 {
-    int mGalleryItemBackground;
     private Context mContext;
     private Image[] images;
     private String[] files_;
 
+    private int width_ = 0;
 
     public PhotoAdapter(Context c, String[] files)
     {
         mContext = c;
         files_ = files;
+        width_ = MainActivity.width;
     }
 
     public int getCount() {
@@ -46,18 +49,18 @@ public class PhotoAdapter extends BaseAdapter
 
         ImageView imageView;
 
+        if(width_ == 0)
+            width_ = Math.min(parent.getMeasuredWidth(), parent.getMeasuredHeight());
+
         if (convertView == null) {
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(400, 400));
+            imageView.setLayoutParams(new GridView.LayoutParams(width_/4 - 4 * 5 ,width_/4));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            //imageView.setPadding(8, 8, 8, 8);
         }
         else
         {
             imageView = (ImageView) convertView;
         }
-
-        System.out.println("DEBUG MS " + mContext.getContentResolver());
 
         Bitmap myBitmap = BitmapFactory.decodeFile(files_[position]);
         imageView.setImageBitmap(myBitmap);

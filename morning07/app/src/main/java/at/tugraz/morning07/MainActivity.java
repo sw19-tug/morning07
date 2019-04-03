@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity
     protected GridView photoGridView;
     protected PhotoAdapter photoAdapter;
 
+    public static int width = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -58,17 +60,19 @@ public class MainActivity extends AppCompatActivity
                 Environment.DIRECTORY_DCIM,
                 Environment.DIRECTORY_DOCUMENTS,
                 Environment.DIRECTORY_DOWNLOADS,
-                Environment.DIRECTORY_PICTURES
+                Environment.DIRECTORY_PICTURES + "/pics"
         };
         ArrayList<File> photoFiles = new ArrayList<File>();
         for (int directoryIndex = 0; directoryIndex < directories.length; directoryIndex++) {
             String directoryName = directories[directoryIndex];
             File directory = Environment.getExternalStoragePublicDirectory(directoryName);
             if (directory.isDirectory()) {
+
                 File[] filteredFiles = directory.listFiles(new FileFilter() {
                     @Override
                     public boolean accept(File file)
                     {
+                        System.out.println("DEBUG MS " + file.getAbsolutePath());
                         return (file.getAbsolutePath().endsWith(".bmp") ||
                                 file.getAbsolutePath().endsWith(".gif") ||
                                 file.getAbsolutePath().endsWith(".jpg") ||
@@ -104,7 +108,9 @@ public class MainActivity extends AppCompatActivity
     void setupPhotoGridView()
     {
 
+        width = Math.min(getWindowManager().getDefaultDisplay().getWidth(), getWindowManager().getDefaultDisplay().getHeight());
         photoGridView = findViewById(R.id.photoGridView);
+        photoGridView.setColumnWidth(width/4 - 8*5);
         photoAdapter = new PhotoAdapter(this, photoFilesPaths);
         photoGridView.setAdapter(photoAdapter);
     }
