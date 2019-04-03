@@ -8,49 +8,30 @@ import java.util.Date;
 
 public class FileMock extends File
 {
-    public FileMock(String pathname) {
+    private String name_;
+    private Date lastModified_;
+    private long size_;
+
+    public FileMock(String pathname, String name, Date lastModified, long length) {
         super(pathname);
+        name_ = name;
+        lastModified_ = lastModified;
+        size_ = length;
     }
 
     @Override
     public String getName() {
-        return super.getName();
+        return name_;
     }
 
     @Override
     public long lastModified() {
-        return super.lastModified();
+        return lastModified_.getTime();
     }
 
     @Override
     public long length() {
-        return super.length();
+        return size_;
     }
 }
 
-/*public class MockImage extends Image {
-    private String filename_;
-    private Date date_;
-    private int filesize_;
-
-
-    public MockImage(String filename, Date date, int filesize) {
-        super();
-        //super();
-        filename_ = filename;
-        date_ = date;
-        filesize_ = filesize;
-    }
-
-    public String getFilename() {
-        return filename_;
-    }
-
-    public Date getDate() {
-        return date_;
-    }
-
-    public int getFilesize() {
-        return filesize_;
-    }
-}*/
