@@ -1,7 +1,5 @@
 package at.tugraz.morning07;
 
-import android.media.Image;
-
 import java.io.File;
 import java.util.Date;
 

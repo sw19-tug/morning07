@@ -1,13 +1,8 @@
 package at.tugraz.morning07;
 
-import android.media.Image;
-import android.provider.MediaStore;
-
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
-import java.util.logging.Filter;
 
 public class SortImages {
 
@@ -49,8 +44,20 @@ public class SortImages {
         return imageArrayToSort;
     }
 
-    public boolean sortByFileSize()
+    public List<File> sortByFileSize(List<File> imageArrayToSort)
     {
-        return true;
+        for (int i = 0; i<imageArrayToSort.size() - 1; i++)
+        {
+            for (int next = i+1; next < imageArrayToSort.size(); next++)
+            {
+                if (imageArrayToSort.get(i).length() < imageArrayToSort.get(next).length())
+                {
+                    File tmp = imageArrayToSort.get(i);
+                    imageArrayToSort.set(i, imageArrayToSort.get(next));
+                    imageArrayToSort.set(next, tmp);
+                }
+            }
+        }
+        return imageArrayToSort;
     }
 }
