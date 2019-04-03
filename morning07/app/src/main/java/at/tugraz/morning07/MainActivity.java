@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.widget.GridView;
 
 import java.io.File;
+import java.io.FileFilter;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -51,12 +52,22 @@ public class MainActivity extends AppCompatActivity
     }
 
     File[] getPhotoFiles() {
-        File[] files = null;
         File dirDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         if (dirDownload.isDirectory()) {
-             files = dirDownload.listFiles();
+             return dirDownload.listFiles(new FileFilter() {
+                 @Override
+                 public boolean accept(File file)
+                 {
+                     return (file.getAbsolutePath().endsWith(".bmp") ||
+                             file.getAbsolutePath().endsWith(".gif") ||
+                             file.getAbsolutePath().endsWith(".jpg") ||
+                             file.getAbsolutePath().endsWith(".jpeg") ||
+                             file.getAbsolutePath().endsWith(".png") ||
+                             file.getAbsolutePath().endsWith(".webp"));
+                 }
+             });
         }
-        return files;
+        return null;
     }
 
     String[] getPhotoFilesPaths(File[] files) {
