@@ -15,9 +15,7 @@ public class SortImages {
     public Image[] sortByName(Image[] imageArrayToSort)
     {
         Image[] tmp_array = imageArrayToSort;
-        tmp_array[0] = imageArrayToSort[2];
-        tmp_array[1] = imageArrayToSort[1];
-        tmp_array[2] = imageArrayToSort[0];
+        
         return tmp_array;
     }
 

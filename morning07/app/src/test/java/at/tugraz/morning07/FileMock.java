@@ -1,9 +1,34 @@
 package at.tugraz.morning07;
 
+import android.media.Image;
+
+import java.io.File;
 import java.util.Date;
 
 
-public class MockImage {
+public class FileMock extends File
+{
+    public FileMock(String pathname) {
+        super(pathname);
+    }
+
+    @Override
+    public String getName() {
+        return super.getName();
+    }
+
+    @Override
+    public long lastModified() {
+        return super.lastModified();
+    }
+
+    @Override
+    public long length() {
+        return super.length();
+    }
+}
+
+/*public class MockImage extends Image {
     private String filename_;
     private Date date_;
     private int filesize_;
@@ -28,4 +53,4 @@ public class MockImage {
     public int getFilesize() {
         return filesize_;
     }
-}
+}*/
