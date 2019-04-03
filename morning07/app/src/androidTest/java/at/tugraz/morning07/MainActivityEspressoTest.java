@@ -25,9 +25,9 @@ public class MainActivityEspressoTest
     public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void listViewVisible()
+    public void hasVisibleGridView()
     {
-        onView(withId(R.id.lv_main)).check(matches(isDisplayed()));
+        onView(withId(R.id.photoGridView)).check(matches(isDisplayed()));
     }
 
     @Test
