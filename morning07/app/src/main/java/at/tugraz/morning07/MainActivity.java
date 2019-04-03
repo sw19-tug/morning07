@@ -52,37 +52,43 @@ public class MainActivity extends AppCompatActivity
             // Permission has already been granted
             loadPhotosFromStorage();
         }
-
     }
 
-    File[] getPhotoFiles() {
+    private boolean isImageFile(File file) {
+        return (file.getAbsolutePath().endsWith(".bmp") ||
+                file.getAbsolutePath().endsWith(".gif") ||
+                file.getAbsolutePath().endsWith(".jpg") ||
+                file.getAbsolutePath().endsWith(".jpeg") ||
+                file.getAbsolutePath().endsWith(".png") ||
+                file.getAbsolutePath().endsWith(".webp"));
+    }
+
+    public ArrayList<File> getPhotoFiles(File dir) {
+        ArrayList<File> files = new ArrayList<File>();
+        if (dir != null && dir.isDirectory()) {
+            for (File file : dir.listFiles()) {
+                if (file.isDirectory()) {
+                    files.addAll(getPhotoFiles(file));
+                } else if (isImageFile(file)) {
+                    files.add(file);
+                }
+            }
+        } else if (isImageFile(dir)) {
+            files.add(dir);
+        }
+        return files;
+    }
+
+    File[] getAllPhotoFiles() {
         String[] directories = {
                 Environment.DIRECTORY_DCIM,
-                Environment.DIRECTORY_DOCUMENTS,
-                Environment.DIRECTORY_DOWNLOADS,
-                Environment.DIRECTORY_PICTURES + "/pics"
+                Environment.DIRECTORY_PICTURES
         };
         ArrayList<File> photoFiles = new ArrayList<File>();
         for (int directoryIndex = 0; directoryIndex < directories.length; directoryIndex++) {
             String directoryName = directories[directoryIndex];
             File directory = Environment.getExternalStoragePublicDirectory(directoryName);
-            if (directory.isDirectory()) {
-
-                File[] filteredFiles = directory.listFiles(new FileFilter() {
-                    @Override
-                    public boolean accept(File file)
-                    {
-                        System.out.println("DEBUG MS " + file.getAbsolutePath());
-                        return (file.getAbsolutePath().endsWith(".bmp") ||
-                                file.getAbsolutePath().endsWith(".gif") ||
-                                file.getAbsolutePath().endsWith(".jpg") ||
-                                file.getAbsolutePath().endsWith(".jpeg") ||
-                                file.getAbsolutePath().endsWith(".png") ||
-                                file.getAbsolutePath().endsWith(".webp"));
-                    }
-                });
-                photoFiles.addAll(Arrays.asList(filteredFiles));
-            }
+            photoFiles.addAll(getPhotoFiles(directory));
         }
         return photoFiles.toArray(new File[photoFiles.size()]);
     }
@@ -99,7 +105,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     void loadPhotosFromStorage() {
-        photoFiles = getPhotoFiles();
+        photoFiles = getAllPhotoFiles();
         photoFilesPaths = getPhotoFilesPaths(photoFiles);
 
         setupPhotoGridView();

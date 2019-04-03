@@ -3,16 +3,12 @@ package at.tugraz.morning07;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.util.regex.Pattern;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -22,7 +18,6 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityEspressoTest
@@ -53,14 +48,14 @@ public class MainActivityEspressoTest
     @Test
     public void checkFiles()
     {
-        File[] photoFiles = activityRule.getActivity().getPhotoFiles();
+        File[] photoFiles = activityRule.getActivity().getAllPhotoFiles();
         assertThat("Photo files must not be null.", photoFiles != null);
     }
 
     @Test
     public void checkFilePaths()
     {
-        File[] photoFiles = activityRule.getActivity().getPhotoFiles();
+        File[] photoFiles = activityRule.getActivity().getAllPhotoFiles();
         String[] photoFilesPaths = activityRule.getActivity().getPhotoFilesPaths(photoFiles);
         assertThat("Photo file paths must not be null.", photoFilesPaths != null);
     }
@@ -68,7 +63,7 @@ public class MainActivityEspressoTest
     @Test
     public void checkFilePathsIfImages()
     {
-        File[] photoFiles = activityRule.getActivity().getPhotoFiles();
+        File[] photoFiles = activityRule.getActivity().getAllPhotoFiles();
         String[] photoFilesPaths = activityRule.getActivity().getPhotoFilesPaths(photoFiles);
 
         for(int i = 0; i < photoFilesPaths.length; i++)
