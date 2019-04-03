@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.GridView;
 
 import java.io.File;
 
@@ -17,6 +18,8 @@ public class MainActivity extends AppCompatActivity
 
     private File[] photoFiles;
     private String[] photoFilesPaths;
+    protected GridView photoGridView;
+    protected PhotoAdapter photoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -70,8 +73,18 @@ public class MainActivity extends AppCompatActivity
     void loadPhotosFromStorage() {
         photoFiles = getPhotoFiles();
         photoFilesPaths = getPhotoFilesPaths(photoFiles);
-        // TODO: Initialize Grid View
+
+        setupPhotoGridView();
     }
+
+    void setupPhotoGridView()
+    {
+
+        photoGridView = findViewById(R.id.photoGridView);
+        photoAdapter = new PhotoAdapter(this, photoFilesPaths);
+        photoGridView.setAdapter(photoAdapter);
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
