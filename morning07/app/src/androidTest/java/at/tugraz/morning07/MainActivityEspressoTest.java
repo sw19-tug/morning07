@@ -2,7 +2,11 @@ package at.tugraz.morning07;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.GridView;
+import android.widget.ListAdapter;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +17,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,8 +32,22 @@ public class MainActivityEspressoTest
     @Test
     public void hasVisibleGridView()
     {
-        //onView(withId(R.id.photoGridView)).check(matches(isDisplayed()));
+        onView(withId(R.id.photoGridView)).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void checkForPhotoAdapter()
+    {
+        assertThat(activityRule.getActivity().photoAdapter, instanceOf(PhotoAdapter.class));
+    }
+
+    @Test
+    public void checkGridViewPhotoAdapter()
+    {
+        GridView photoGridView = activityRule.getActivity().photoAdapter;
+        assertThat(photoGridView.getAdapter(), instanceOf(PhotoAdapter.class));
+    }
+
 
     @Test
     public void checkFiles()
@@ -44,6 +63,5 @@ public class MainActivityEspressoTest
         String[] photoFilesPaths = activityRule.getActivity().getPhotoFilesPaths(photoFiles);
         assertThat("Photo file paths must not be null.", photoFilesPaths != null);
     }
-
 
 }
