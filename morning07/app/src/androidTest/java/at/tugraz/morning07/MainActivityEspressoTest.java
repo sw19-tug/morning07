@@ -7,6 +7,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -29,26 +31,17 @@ public class MainActivityEspressoTest
     }
 
     @Test
-    public void checkFileName()
+    public void checkFiles()
     {
-        String[] myName = activityRule.getActivity().filename_;
-
-        for(int i = 0; i < myName.length; i++)
-        {
-            String testString = myName[i];
-            assertThat(testString.isEmpty(), is(true));
-        }
+        File[] photoFiles = activityRule.getActivity().getPhotoFiles();
+        assertThat("Photo files must not be null.", photoFiles == null);
     }
 
     @Test
-    public void checkFilePath()
+    public void checkFilePaths()
     {
-       String[] myPath = activityRule.getActivity().filepath_;
-
-        for(int i = 0; i < myPath.length; i++)
-        {
-            String testString = myPath[i];
-            assertThat(testString.isEmpty(), is(true));
-        }
+        File[] photoFiles = activityRule.getActivity().getPhotoFiles();
+        String[] photoFilesPaths = activityRule.getActivity().getPhotoFilesPaths(photoFiles);
+        assertThat("Photo file paths must not be null.", photoFilesPaths == null);
     }
 }
