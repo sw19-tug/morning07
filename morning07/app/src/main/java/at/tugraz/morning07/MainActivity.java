@@ -12,6 +12,8 @@ import android.widget.GridView;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -52,22 +54,33 @@ public class MainActivity extends AppCompatActivity
     }
 
     File[] getPhotoFiles() {
-        File dirDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        if (dirDownload.isDirectory()) {
-             return dirDownload.listFiles(new FileFilter() {
-                 @Override
-                 public boolean accept(File file)
-                 {
-                     return (file.getAbsolutePath().endsWith(".bmp") ||
-                             file.getAbsolutePath().endsWith(".gif") ||
-                             file.getAbsolutePath().endsWith(".jpg") ||
-                             file.getAbsolutePath().endsWith(".jpeg") ||
-                             file.getAbsolutePath().endsWith(".png") ||
-                             file.getAbsolutePath().endsWith(".webp"));
-                 }
-             });
+        String[] directories = {
+                Environment.DIRECTORY_DCIM,
+                Environment.DIRECTORY_DOCUMENTS,
+                Environment.DIRECTORY_DOWNLOADS,
+                Environment.DIRECTORY_PICTURES
+        };
+        ArrayList<File> photoFiles = new ArrayList<File>();
+        for (int directoryIndex = 0; directoryIndex < directories.length; directoryIndex++) {
+            String directoryName = directories[directoryIndex];
+            File directory = Environment.getExternalStoragePublicDirectory(directoryName);
+            if (directory.isDirectory()) {
+                File[] filteredFiles = directory.listFiles(new FileFilter() {
+                    @Override
+                    public boolean accept(File file)
+                    {
+                        return (file.getAbsolutePath().endsWith(".bmp") ||
+                                file.getAbsolutePath().endsWith(".gif") ||
+                                file.getAbsolutePath().endsWith(".jpg") ||
+                                file.getAbsolutePath().endsWith(".jpeg") ||
+                                file.getAbsolutePath().endsWith(".png") ||
+                                file.getAbsolutePath().endsWith(".webp"));
+                    }
+                });
+                photoFiles.addAll(Arrays.asList(filteredFiles));
+            }
         }
-        return null;
+        return photoFiles.toArray(new File[photoFiles.size()]);
     }
 
     String[] getPhotoFilesPaths(File[] files) {
