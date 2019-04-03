@@ -4,21 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Overview_stub">
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:onClick="test">
 
         <ImageView
-            android:id="@+id/big_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/index" />
+            android:id="@+id/prev"
+            android:layout_width="30pt"
+            android:layout_height="30pt"
+            android:src="@drawable/prev" />
+        <ImageView
+            android:id="@+id/prev2"
+            android:layout_width="30pt"
+            android:layout_height="30pt"
+            android:src="@drawable/prev2" />
+        <ImageView
+            android:id="@+id/prev3"
+            android:layout_width="30pt"
+            android:layout_height="30pt"
+            android:src="@drawable/prev3" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
