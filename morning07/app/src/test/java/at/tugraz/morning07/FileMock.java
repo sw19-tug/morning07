@@ -6,8 +6,7 @@ import java.io.File;
 import java.util.Date;
 
 
-public class FileMock extends File
-{
+public class FileMock extends File {
     private String name_;
     private Date lastModified_;
     private long size_;
@@ -17,6 +16,7 @@ public class FileMock extends File
         name_ = name;
         lastModified_ = lastModified;
         size_ = length;
+        setLastModified(lastModified.getTime());
     }
 
     @Override
@@ -27,6 +27,12 @@ public class FileMock extends File
     @Override
     public long lastModified() {
         return lastModified_.getTime();
+    }
+
+    @Override
+    public boolean setLastModified(long time) {
+        lastModified_.setTime(time);
+        return true;
     }
 
     @Override

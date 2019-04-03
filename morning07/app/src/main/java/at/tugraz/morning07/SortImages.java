@@ -2,6 +2,8 @@ package at.tugraz.morning07;
 
 import android.media.Image;
 import android.provider.MediaStore;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +14,22 @@ public class SortImages {
     public SortImages() {
     }
 
-    public Image[] sortByName(Image[] imageArrayToSort)
+    public List<File> sortByName(List<File> imageArrayToSort)
     {
-        Image[] tmp_array = imageArrayToSort;
-        
-        return tmp_array;
+        for (int i = 0; i<imageArrayToSort.size() - 1; i++)
+        {
+            for (int next = i+1; next < imageArrayToSort.size(); next++)
+            {
+                if (imageArrayToSort.get(i).getName().compareTo(imageArrayToSort.get(next).getName()) > 0)
+                {
+                    File tmp = imageArrayToSort.get(i);
+                    imageArrayToSort.set(i, imageArrayToSort.get(next));
+                    imageArrayToSort.set(next, tmp);
+                }
+            }
+        }
+
+        return imageArrayToSort;
     }
 
     public boolean sortByDate()
