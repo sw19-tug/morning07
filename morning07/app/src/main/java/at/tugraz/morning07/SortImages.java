@@ -32,9 +32,21 @@ public class SortImages {
         return imageArrayToSort;
     }
 
-    public boolean sortByDate()
+    public List<File> sortByDate(List<File> imageArrayToSort)
     {
-        return true;
+        for (int i = 0; i<imageArrayToSort.size() - 1; i++)
+        {
+            for (int next = i+1; next < imageArrayToSort.size(); next++)
+            {
+                if (imageArrayToSort.get(i).lastModified() < imageArrayToSort.get(next).lastModified())
+                {
+                    File tmp = imageArrayToSort.get(i);
+                    imageArrayToSort.set(i, imageArrayToSort.get(next));
+                    imageArrayToSort.set(next, tmp);
+                }
+            }
+        }
+        return imageArrayToSort;
     }
 
     public boolean sortByFileSize()
