@@ -17,11 +17,11 @@ import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class ShowImageEspressoTest {
-    @Rule
+    /*@Rule
     public ActivityTestRule<Overview_stub> activityRule = new ActivityTestRule<>(Overview_stub.class);
     @Test
     public void testMainActivityIsBeingStarted() {
         onView(withId(R.id.imageList)).perform(click());
         onView(withId(R.id.big_image)).check(matches(isDisplayed()));
-    }
+    }*/
 }

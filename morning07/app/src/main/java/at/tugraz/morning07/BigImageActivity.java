@@ -27,12 +27,15 @@ public class BigImageActivity extends AppCompatActivity {
         ArrayList<Uri> imageUris = new ArrayList<>();
         File f = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         Intent intent = getIntent();
-        String message = intent.getStringExtra("filenpath");
-
-        File imgFile = new  File(message);
-        imageUris.add(Uri.parse(imgFile.getAbsolutePath()));
-        shareListener.setImageArray(imageUris);
-        this.shareButton.setOnClickListener(shareListener);
+        if(intent != null){
+            String message = intent.getStringExtra("filenpath");
+            if(message != null) {
+                File imgFile = new File(message);
+                imageUris.add(Uri.parse(imgFile.getAbsolutePath()));
+                shareListener.setImageArray(imageUris);
+                this.shareButton.setOnClickListener(shareListener);
+            }
+        }
     }
 
     @Override
@@ -40,13 +43,16 @@ public class BigImageActivity extends AppCompatActivity {
         super.onStart();
         ImageView bigView = (ImageView) findViewById(R.id.big_image);
         Intent intent = getIntent();
-        String message = intent.getStringExtra("filenpath");
-
-        File imgFile = new  File(message);
-
-        if(imgFile.exists()){
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            bigView.setImageBitmap(myBitmap);
+        if(intent != null){
+            String message = intent.getStringExtra("filenpath");
+            if(message != null) {
+                File imgFile = new File(message);
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                bigView.setImageBitmap(myBitmap);
+            }
+        }
+        else{
+            bigView.setImageResource(R.drawable.prev2);
         }
     }
 }

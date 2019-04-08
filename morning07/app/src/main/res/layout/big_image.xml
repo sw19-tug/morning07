@@ -34,4 +34,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="16dp" />
 
+    <Button
+        android:id="@+id/turnButton"
+        android:text="turn"
+        android:layout_width="62dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="17dp"
+        />
+
 </android.support.constraint.ConstraintLayout>
