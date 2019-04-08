@@ -6,32 +6,4 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
-
-        <ImageView
-            android:id="@+id/big_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:src="@drawable/index" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/shareButton"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:layout_marginEnd="17dp"
-        android:contentDescription="sha"
-        android:drawableEnd="@android:drawable/ic_menu_share"
-        android:gravity="center_horizontal|top"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="16dp" />
-
 </android.support.constraint.ConstraintLayout>
