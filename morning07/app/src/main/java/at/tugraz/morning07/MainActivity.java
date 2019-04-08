@@ -1,6 +1,7 @@
 package at.tugraz.morning07;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -22,6 +23,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -136,7 +139,9 @@ public class MainActivity extends AppCompatActivity
                 PhotoAdapter adapter = (PhotoAdapter) parent.getAdapter();
                 String filepath = adapter.getItem(position);
                 File photo = new File(filepath);
-                //TODO: open big image view with selected photo
+                Intent intent = new Intent(MainActivity.this,BigImageActivity.class);
+                intent.putExtra("filenpath", filepath);
+                startActivity(intent);
             }
         });
     }
