@@ -12,7 +12,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
-
+import android.net.Uri;
+import android.widget.Button;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.widget.ImageView;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
@@ -28,6 +33,8 @@ public class MainActivity extends AppCompatActivity
     protected PhotoAdapter photoAdapter;
 
     public static int width = 0;
+
+    private Button shareButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

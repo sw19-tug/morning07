@@ -1,0 +1,7 @@
+this.shareButton = this.findViewById(R.id.shareButton);
+       OnClickListenerShare shareListener = new OnClickListenerShare();
+       ArrayList<Uri> imageUris = new ArrayList<>();
+       File f = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+       imageUris.add(Uri.parse(f.getAbsolutePath() + "/test.jpg")); // add image uris
+       shareListener.setImageArray(imageUris);
+       this.shareButton.setOnClickListener(shareListener);
