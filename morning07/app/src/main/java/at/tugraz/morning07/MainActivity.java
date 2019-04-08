@@ -8,7 +8,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -119,6 +122,16 @@ public class MainActivity extends AppCompatActivity
         photoGridView.setColumnWidth(width/4 - 8*5);
         photoAdapter = new PhotoAdapter(this, photoFilesPaths);
         photoGridView.setAdapter(photoAdapter);
+        photoGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                PhotoAdapter adapter = (PhotoAdapter) parent.getAdapter();
+                String filepath = adapter.getItem(position);
+                File photo = new File(filepath);
+                //TODO: open big image view with selected photo
+            }
+        });
     }
 
 

@@ -21,9 +21,7 @@ import static android.widget.GridView.AUTO_FIT;
 public class PhotoAdapter extends BaseAdapter
 {
     private Context mContext;
-    private Image[] images;
     private String[] files_;
-
     private int width_ = 0;
 
     public PhotoAdapter(Context c, String[] files)
@@ -37,8 +35,8 @@ public class PhotoAdapter extends BaseAdapter
         return files_.length;
     }
 
-    public Image getItem(int position) {
-        return images[position];
+    public String getItem(int position) {
+        return files_[position];
     }
 
     public long getItemId(int position) {
