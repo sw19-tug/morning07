@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -54,5 +55,11 @@ public class BigImageActivity extends AppCompatActivity {
         else{
             bigView.setImageResource(R.drawable.prev2);
         }
+    }
+
+    public void turn(View view)
+    {
+        ImageView bigView = (ImageView) findViewById(R.id.big_image);
+        bigView.setRotation(90);
     }
 }

@@ -29,6 +29,6 @@ public class TurnPictureEspressoTest {
     @Test
     public void testTurnButtonWorks(){
         onView(withId(R.id.turnButton)).perform(click());
-        onView(withId(R.id.turnButton)).check(matches(withRotation(90)));
+        onView(withId(R.id.big_image)).check(matches(withRotation(90)));
     }
 }
