@@ -26,12 +26,25 @@
         android:id="@+id/shareButton"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:layout_marginEnd="17dp"
+        android:layout_marginEnd="55dp"
         android:contentDescription="sha"
         android:drawableEnd="@android:drawable/ic_menu_share"
         android:gravity="center_horizontal|top"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginBottom="17dp"
+        android:contentDescription="sha"
+        android:drawableEnd="@android:drawable/ic_delete"
+        android:gravity="center_vertical|bottom|center_horizontal"
+        android:visibility="visible"
+        app:layout_constraintLeft_toRightOf="@+id/shareButton"
         tools:layout_editor_absoluteY="16dp" />
 
 </android.support.constraint.ConstraintLayout>
