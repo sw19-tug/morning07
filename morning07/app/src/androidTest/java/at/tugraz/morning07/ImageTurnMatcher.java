@@ -22,7 +22,7 @@ protected boolean matchesSafely(View target) {
         return false;
         }
         ImageView imageView = (ImageView) target;
-        return imageView.getRotation() == 90;
+        return imageView.getRotation() == expectedRotation;
 }
 
 

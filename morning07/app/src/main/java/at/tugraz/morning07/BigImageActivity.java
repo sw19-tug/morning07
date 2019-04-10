@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 public class BigImageActivity extends AppCompatActivity {
 
+    int turnRatio = 0;
+
     private Button shareButton;
 
     @Override
@@ -60,6 +62,7 @@ public class BigImageActivity extends AppCompatActivity {
     public void turn(View view)
     {
         ImageView bigView = (ImageView) findViewById(R.id.big_image);
-        bigView.setRotation(90);
+        turnRatio+=90;
+        bigView.setRotation(turnRatio == 360 ? 0 : turnRatio);
     }
 }
