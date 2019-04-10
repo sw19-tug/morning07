@@ -1,6 +1,7 @@
 package at.tugraz.morning07.adapter;
 
 import android.app.Activity;
+import android.support.annotation.VisibleForTesting;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -56,7 +57,12 @@ public class ImageListAdapter extends BaseAdapter implements Filterable {
     }
 
 
-    private class ImageFilter extends Filter {
+    public class ImageFilter extends Filter {
+
+        @VisibleForTesting
+        public ArrayList<File> testPerformFiltering(CharSequence constraint) {
+            return (ArrayList<File>) this.performFiltering(constraint).values;
+        }
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {

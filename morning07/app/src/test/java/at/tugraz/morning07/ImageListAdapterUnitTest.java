@@ -13,13 +13,13 @@ import at.tugraz.morning07.adapter.ImageListAdapter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import android.widget.Filter;
 
-public class ImageListAdapterUnitTest {
+public class ImageListAdapterUnitTest{
 
     ImageListAdapter adapter;
     ArrayList<File> imageList;
     ArrayList<File> filteredImageList;
+    ImageListAdapter.ImageFilter filter;
     int imageCounter;
     CharSequence query;
 
@@ -31,7 +31,8 @@ public class ImageListAdapterUnitTest {
     public void setUp() throws IOException {
         imageList = new ArrayList<>();
         filteredImageList = new ArrayList<>();
-
+        adapter = new ImageListAdapter(null, imageList);
+        filter = (ImageListAdapter.ImageFilter) adapter.getFilter();
         imageList.add(image1);
         imageList.add(image2);
         imageList.add(image3);
@@ -39,8 +40,8 @@ public class ImageListAdapterUnitTest {
         filteredImageList.add(image2);
 
         imageCounter = imageList.size();
-        query = "asdf";
-        adapter = new ImageListAdapter(null, imageList);
+
+
     }
 
     @Test
@@ -56,7 +57,7 @@ public class ImageListAdapterUnitTest {
 
     @Test
     public void getItem(){
-        assertEquals(image2, adapter.getItem(2));
+        assertEquals(image2, adapter.getItem(1));
     }
 
     @Test
@@ -66,23 +67,26 @@ public class ImageListAdapterUnitTest {
 
     @Test
     public void filterImages() {
-        assertEquals(filteredImageList, adapter.getFilter().performeFiltering(query).values);
-        assertEquals(imageCounter, adapter.getFilter().performeFiltering(query).count);
+        query = "Max";
+        assertEquals(filteredImageList, filter.testPerformFiltering(query));
+        assertEquals(filteredImageList.size(), filter.testPerformFiltering(query).size());
     }
 
     @Test
     public void finalTest() {
         assertNotNull(adapter);
         assertNotNull(adapter.getFilter());
-        FilterResults result = adapter.getFilter().performeFiltering(query);
-        assertEquals(filteredImageList, result.values);
-        assertEquals(imageCounter, result.count);
+        query = "Max";
+        ArrayList<File> result = filter.testPerformFiltering(query);
+        assertEquals(filteredImageList, result);
+        assertEquals(filteredImageList.size(), result.size());
         CharSequence nullQuery = "fffNULLfff";
-        result = adapter.getFilter().performeFiltering(nullQuery);
-        assertEquals(new ArrayList<File>(), result.value);
-        assertEquals(0, result.count);
+        result = filter.testPerformFiltering(nullQuery);
+        assertEquals(new ArrayList<File>(), result);
+        assertEquals(0, result.size());
         CharSequence allQuery = "";
-        assertEquals(imageList, result.value);
-        assertEquals(imageCounter, result.count);
+        result = filter.testPerformFiltering(allQuery);
+        assertEquals(imageList, result);
+        assertEquals(imageCounter, result.size());
     }
 }
