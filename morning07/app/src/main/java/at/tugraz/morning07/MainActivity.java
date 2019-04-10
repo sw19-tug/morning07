@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.media.Image;
 import android.widget.ImageView;
 import java.io.File;
 import java.io.FileFilter;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -36,8 +38,6 @@ public class MainActivity extends AppCompatActivity
     protected PhotoAdapter photoAdapter;
 
     public static int width = 0;
-
-    private Button shareButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -67,13 +67,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @VisibleForTesting
+    public boolean testIsImageFile(File file) {
+        return isImageFile(file);
+    }
+
     private boolean isImageFile(File file) {
-        return (file.getAbsolutePath().endsWith(".bmp") ||
-                file.getAbsolutePath().endsWith(".gif") ||
-                file.getAbsolutePath().endsWith(".jpg") ||
-                file.getAbsolutePath().endsWith(".jpeg") ||
-                file.getAbsolutePath().endsWith(".png") ||
-                file.getAbsolutePath().endsWith(".webp"));
+        String mimeType = URLConnection.guessContentTypeFromName(file.getAbsolutePath());
+        return mimeType != null && mimeType.startsWith("image");
     }
 
     public ArrayList<File> getPhotoFiles(File dir) {
@@ -138,7 +139,6 @@ public class MainActivity extends AppCompatActivity
 
                 PhotoAdapter adapter = (PhotoAdapter) parent.getAdapter();
                 String filepath = adapter.getItem(position);
-                File photo = new File(filepath);
                 Intent intent = new Intent(MainActivity.this,BigImageActivity.class);
                 intent.putExtra("filenpath", filepath);
                 startActivity(intent);

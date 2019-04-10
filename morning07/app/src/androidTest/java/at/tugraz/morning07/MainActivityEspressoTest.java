@@ -64,17 +64,8 @@ public class MainActivityEspressoTest
     public void checkFilePathsIfImages()
     {
         File[] photoFiles = activityRule.getActivity().getAllPhotoFiles();
-        String[] photoFilesPaths = activityRule.getActivity().getPhotoFilesPaths(photoFiles);
-
-        for(int i = 0; i < photoFilesPaths.length; i++)
-        {
-            assertThat("Photo file paths must end with valid endings",
-                    photoFilesPaths[i].endsWith(".gif") ||
-                    photoFilesPaths[i].endsWith(".jpg") ||
-                    photoFilesPaths[i].endsWith(".jpeg") ||
-                    photoFilesPaths[i].endsWith(".png") ||
-                    photoFilesPaths[i].endsWith(".webp"));
-
+        for (File img: photoFiles) {
+            assertThat("An file in photoFiles is no image file!", activityRule.getActivity().testIsImageFile(img));
         }
     }
 }
