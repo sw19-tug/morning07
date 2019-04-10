@@ -31,4 +31,15 @@ public class TurnPictureEspressoTest {
         onView(withId(R.id.turnButton)).perform(click());
         onView(withId(R.id.big_image)).check(matches(withRotation(90)));
     }
+    @Test
+    public void testFullRotation(){
+        onView(withId(R.id.turnButton)).perform(click());
+        onView(withId(R.id.big_image)).check(matches(withRotation(90)));
+        onView(withId(R.id.turnButton)).perform(click());
+        onView(withId(R.id.big_image)).check(matches(withRotation(180)));
+        onView(withId(R.id.turnButton)).perform(click());
+        onView(withId(R.id.big_image)).check(matches(withRotation(270)));
+        onView(withId(R.id.turnButton)).perform(click());
+        onView(withId(R.id.big_image)).check(matches(withRotation(0)));
+    }
 }
