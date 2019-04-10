@@ -15,16 +15,17 @@ import android.widget.ImageView;
 
 import java.io.File;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 import static android.widget.GridView.AUTO_FIT;
 
 public class PhotoAdapter extends BaseAdapter
 {
     private Context mContext;
-    private String[] files_;
+    private ArrayList<String> files_;
     private int width_ = 0;
 
-    public PhotoAdapter(Context c, String[] files)
+    public PhotoAdapter(Context c, ArrayList<String> files)
     {
         mContext = c;
         files_ = files;
@@ -32,11 +33,11 @@ public class PhotoAdapter extends BaseAdapter
     }
 
     public int getCount() {
-        return files_.length;
+        return files_.size();
     }
 
     public String getItem(int position) {
-        return files_[position];
+        return files_.get(position);
     }
 
     public long getItemId(int position) {
@@ -60,7 +61,7 @@ public class PhotoAdapter extends BaseAdapter
             imageView = (ImageView) convertView;
         }
 
-        Bitmap myBitmap = BitmapFactory.decodeFile(files_[position]);
+        Bitmap myBitmap = BitmapFactory.decodeFile(files_.get(position));
         imageView.setImageBitmap(myBitmap);
         return imageView;
     }
