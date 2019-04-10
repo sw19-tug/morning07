@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">morning07</string>
+    <string name="delete_dialog_title">Delete Picture</string>
 </resources>

@@ -1,12 +1,15 @@
 package at.tugraz.morning07;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 public class BigImageActivity extends AppCompatActivity {
 
     private Button shareButton;
+    private Button deleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,34 @@ public class BigImageActivity extends AppCompatActivity {
         imageUris.add(Uri.parse(imgFile.getAbsolutePath()));
         shareListener.setImageArray(imageUris);
         this.shareButton.setOnClickListener(shareListener);
+
+        this.deleteButton = this.findViewById(R.id.deleteButton);
+
+
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+        public void onClick(View v) {
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            //Yes button clicked
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(BigImageActivity.this);
+            builder.setTitle(R.string.delete_dialog_title).setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+        }
+
+        });
     }
 
     @Override
@@ -47,6 +79,8 @@ public class BigImageActivity extends AppCompatActivity {
         if(imgFile.exists()){
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             bigView.setImageBitmap(myBitmap);
+
+
         }
     }
 }

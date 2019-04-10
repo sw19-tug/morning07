@@ -15,6 +15,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.anything;
 
 
@@ -35,6 +36,9 @@ public class DeletePictureEspressoTest {
 
     @Test
     public void dialogShow(){
+        onData(anything()).inAdapterView(withId(R.id.photoGridView)).atPosition(0).perform(click());
+
+        onView(withId(R.id.deleteButton)).check(matches(isDisplayed()));
         onView(withId(R.id.deleteButton)).check(matches(isDisplayed())).perform(click());
         onView(withText(R.string.delete_dialog_title)).inRoot(isDialog()).check(matches(isDisplayed()));
     }
