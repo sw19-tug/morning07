@@ -28,6 +28,4 @@ public class OnClickListenerShare implements View.OnClickListener {
     public void setImageArray(ArrayList<Uri> imageUris) {
         this.imageUris = imageUris;
     }
-
-
 }
