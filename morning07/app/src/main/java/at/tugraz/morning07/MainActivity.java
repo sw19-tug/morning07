@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.media.Image;
 import android.widget.ImageView;
 import java.io.File;
 import java.io.FileFilter;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -30,14 +32,12 @@ public class MainActivity extends AppCompatActivity
 {
     private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 1;
 
-    private File[] photoFiles;
-    private String[] photoFilesPaths;
+    private ArrayList<File> photoFiles;
+    private ArrayList<String> photoFilesPaths;
     protected GridView photoGridView;
     protected PhotoAdapter photoAdapter;
 
     public static int width = 0;
-
-    private Button shareButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -67,13 +67,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @VisibleForTesting
+    public boolean testIsImageFile(File file) {
+        return isImageFile(file);
+    }
+
     private boolean isImageFile(File file) {
-        return (file.getAbsolutePath().endsWith(".bmp") ||
-                file.getAbsolutePath().endsWith(".gif") ||
-                file.getAbsolutePath().endsWith(".jpg") ||
-                file.getAbsolutePath().endsWith(".jpeg") ||
-                file.getAbsolutePath().endsWith(".png") ||
-                file.getAbsolutePath().endsWith(".webp"));
+        String mimeType = URLConnection.guessContentTypeFromName(file.getAbsolutePath());
+        return mimeType != null && mimeType.startsWith("image");
     }
 
     public ArrayList<File> getPhotoFiles(File dir) {
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity
         return files;
     }
 
-    File[] getAllPhotoFiles() {
+    ArrayList<File> getAllPhotoFiles() {
         String[] directories = {
                 Environment.DIRECTORY_DCIM,
                 Environment.DIRECTORY_PICTURES
@@ -103,16 +104,16 @@ public class MainActivity extends AppCompatActivity
             File directory = Environment.getExternalStoragePublicDirectory(directoryName);
             photoFiles.addAll(getPhotoFiles(directory));
         }
-        return photoFiles.toArray(new File[photoFiles.size()]);
+        return photoFiles;
     }
 
-    String[] getPhotoFilesPaths(File[] files) {
+    ArrayList<String> getPhotoFilesPaths(ArrayList<File> files) {
         if (files == null) {
             return  null;
         }
-        String[] filePaths = new String[files.length];
-        for (int i = 0; i < files.length; i++) {
-            filePaths[i] = files[i].getAbsolutePath();
+        ArrayList<String> filePaths = new ArrayList<String>();
+        for (int i = 0; i < files.size(); i++) {
+            filePaths.add(files.get(i).getAbsolutePath());
         }
         return filePaths;
     }
@@ -138,7 +139,6 @@ public class MainActivity extends AppCompatActivity
 
                 PhotoAdapter adapter = (PhotoAdapter) parent.getAdapter();
                 String filepath = adapter.getItem(position);
-                File photo = new File(filepath);
                 Intent intent = new Intent(MainActivity.this,BigImageActivity.class);
                 intent.putExtra("filenpath", filepath);
                 startActivity(intent);
