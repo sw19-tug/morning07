@@ -165,10 +165,10 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // use Adapter
+                photoAdapter.getFilter().filter(newText);
                 return false;
             }
         });
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 }

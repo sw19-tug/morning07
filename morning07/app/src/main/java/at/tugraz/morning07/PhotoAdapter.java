@@ -14,6 +14,7 @@ import android.widget.ImageView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PhotoAdapter extends BaseAdapter implements Filterable
 {
@@ -88,7 +89,7 @@ public class PhotoAdapter extends BaseAdapter implements Filterable
                 ArrayList<File> tmpList = new ArrayList<>();
 
                 for (File file : originalImageList) {
-                    if(file.getName().toLowerCase().equals(constraint.toString().toLowerCase())) {
+                    if(file.getName().toLowerCase().trim().contains(constraint.toString().toLowerCase().trim())) {
                         tmpList.add(file);
                     }
                 }
@@ -108,7 +109,8 @@ public class PhotoAdapter extends BaseAdapter implements Filterable
             if(results == null || results.count <= 0) {
                 return;
             }
-            filteredImageList = (ArrayList<File>) results.values;
+            filteredImageList.clear();
+            filteredImageList.addAll((List)results.values);
             notifyDataSetChanged();
         }
     };
