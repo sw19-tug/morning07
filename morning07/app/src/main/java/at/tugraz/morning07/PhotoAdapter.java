@@ -3,40 +3,39 @@ package at.tugraz.morning07;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.net.Uri;
-import android.os.Environment;
-import android.util.DisplayMetrics;
+import android.support.annotation.VisibleForTesting;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.GridView;
 import android.widget.ImageView;
 
 import java.io.File;
-import java.lang.reflect.Array;
+import java.util.ArrayList;
 
-import static android.widget.GridView.AUTO_FIT;
-
-public class PhotoAdapter extends BaseAdapter
+public class PhotoAdapter extends BaseAdapter implements Filterable
 {
     private Context mContext;
-    private String[] files_;
+    private final ArrayList<File> originalImageList;
+    private ArrayList<File> filteredImageList;
     private int width_ = 0;
 
-    public PhotoAdapter(Context c, String[] files)
+    public PhotoAdapter(Context c, ArrayList<File> files)
     {
         mContext = c;
-        files_ = files;
+        originalImageList = new ArrayList<>(files);
+        filteredImageList = files;
         width_ = MainActivity.width;
     }
 
     public int getCount() {
-        return files_.length;
+        return filteredImageList.size();
     }
 
-    public String getItem(int position) {
-        return files_[position];
+    public File getItem(int position) {
+        return filteredImageList.get(position);
     }
 
     public long getItemId(int position) {
@@ -60,8 +59,57 @@ public class PhotoAdapter extends BaseAdapter
             imageView = (ImageView) convertView;
         }
 
-        Bitmap myBitmap = BitmapFactory.decodeFile(files_[position]);
+        Bitmap myBitmap = BitmapFactory.decodeFile(getPathFromItem(position));
         imageView.setImageBitmap(myBitmap);
         return imageView;
     }
+
+    public String getPathFromItem(int position) {
+        return filteredImageList.get(position).getAbsolutePath();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return imageFilter;
+    }
+
+
+    private Filter imageFilter = new Filter() {
+
+        @VisibleForTesting
+        public ArrayList<File> testPerformFiltering(CharSequence constraint) {
+            return (ArrayList<File>) this.performFiltering(constraint).values;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults filterResults = new FilterResults();
+            if (constraint != null && constraint.length() > 0) {
+                ArrayList<File> tmpList = new ArrayList<>();
+
+                for (File file : originalImageList) {
+                    if(file.getName().toLowerCase().equals(constraint.toString().toLowerCase())) {
+                        tmpList.add(file);
+                    }
+                }
+
+                filterResults.count = tmpList.size();
+                filterResults.values = tmpList;
+            } else {
+                filterResults.count = originalImageList.size();
+                filterResults.values = originalImageList;
+            }
+
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            if(results == null || results.count <= 0) {
+                return;
+            }
+            filteredImageList = (ArrayList<File>) results.values;
+            notifyDataSetChanged();
+        }
+    };
 }

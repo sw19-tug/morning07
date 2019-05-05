@@ -30,14 +30,11 @@ public class MainActivity extends AppCompatActivity
 {
     private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 1;
 
-    private File[] photoFiles;
-    private String[] photoFilesPaths;
+    private ArrayList<File> photoFiles = new ArrayList<>();
     protected GridView photoGridView;
     protected PhotoAdapter photoAdapter;
 
     public static int width = 0;
-
-    private Button shareButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -92,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         return files;
     }
 
-    File[] getAllPhotoFiles() {
+    ArrayList<File> getAllPhotoFiles() {
         String[] directories = {
                 Environment.DIRECTORY_DCIM,
                 Environment.DIRECTORY_PICTURES
@@ -103,23 +100,11 @@ public class MainActivity extends AppCompatActivity
             File directory = Environment.getExternalStoragePublicDirectory(directoryName);
             photoFiles.addAll(getPhotoFiles(directory));
         }
-        return photoFiles.toArray(new File[photoFiles.size()]);
-    }
-
-    String[] getPhotoFilesPaths(File[] files) {
-        if (files == null) {
-            return  null;
-        }
-        String[] filePaths = new String[files.length];
-        for (int i = 0; i < files.length; i++) {
-            filePaths[i] = files[i].getAbsolutePath();
-        }
-        return filePaths;
+        return photoFiles;
     }
 
     void loadPhotosFromStorage() {
         photoFiles = getAllPhotoFiles();
-        photoFilesPaths = getPhotoFilesPaths(photoFiles);
 
         setupPhotoGridView();
     }
@@ -130,17 +115,16 @@ public class MainActivity extends AppCompatActivity
         width = Math.min(getWindowManager().getDefaultDisplay().getWidth(), getWindowManager().getDefaultDisplay().getHeight());
         photoGridView = findViewById(R.id.photoGridView);
         photoGridView.setColumnWidth(width/4 - 8*5);
-        photoAdapter = new PhotoAdapter(this, photoFilesPaths);
+        photoAdapter = new PhotoAdapter(this, photoFiles);
         photoGridView.setAdapter(photoAdapter);
         photoGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 PhotoAdapter adapter = (PhotoAdapter) parent.getAdapter();
-                String filepath = adapter.getItem(position);
-                File photo = new File(filepath);
+                String filepath = adapter.getPathFromItem(position);
                 Intent intent = new Intent(MainActivity.this,BigImageActivity.class);
-                intent.putExtra("filenpath", filepath);
+                intent.putExtra("filepath", filepath);
                 startActivity(intent);
             }
         });
