@@ -67,6 +67,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadPhotosFromStorage();
+    }
+
     private boolean isImageFile(File file) {
         return (file.getAbsolutePath().endsWith(".bmp") ||
                 file.getAbsolutePath().endsWith(".gif") ||
