@@ -27,7 +27,7 @@ public class BigImageActivity extends AppCompatActivity {
         ArrayList<Uri> imageUris = new ArrayList<>();
         File f = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         Intent intent = getIntent();
-        String message = intent.getStringExtra("filenpath");
+        String message = intent.getStringExtra("filepath");
 
         File imgFile = new  File(message);
         imageUris.add(Uri.parse(imgFile.getAbsolutePath()));
@@ -40,7 +40,7 @@ public class BigImageActivity extends AppCompatActivity {
         super.onStart();
         ImageView bigView = (ImageView) findViewById(R.id.big_image);
         Intent intent = getIntent();
-        String message = intent.getStringExtra("filenpath");
+        String message = intent.getStringExtra("filepath");
 
         File imgFile = new  File(message);
 
