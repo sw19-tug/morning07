@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class ShowImageEspressoTest {
     @Rule
-    public ActivityTestRule<Overview_stub> activityRule = new ActivityTestRule<>(Overview_stub.class);
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
     @Test
     public void testMainActivityIsBeingStarted() {
         onView(withId(R.id.imageList)).perform(click());
