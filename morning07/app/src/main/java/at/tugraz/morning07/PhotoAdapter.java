@@ -106,9 +106,6 @@ public class PhotoAdapter extends BaseAdapter implements Filterable
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            if(results == null || results.count <= 0) {
-                return;
-            }
             filteredImageList.clear();
             filteredImageList.addAll((List)results.values);
             notifyDataSetChanged();
