@@ -69,6 +69,14 @@ public class PhotoAdapter extends BaseAdapter implements Filterable
         return filteredImageList.get(position).getAbsolutePath();
     }
 
+    public ArrayList<File> getFilteredImageList() {
+        return filteredImageList;
+    }
+
+    public ArrayList<File> getOriginalImageList() {
+        return originalImageList;
+    }
+
     @Override
     public Filter getFilter() {
         return imageFilter;

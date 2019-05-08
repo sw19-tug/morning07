@@ -12,9 +12,13 @@ import java.io.File;
 import java.util.ArrayList;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -51,5 +55,18 @@ public class MainActivityEspressoTest
     {
         ArrayList<File> photoFiles = activityRule.getActivity().getAllPhotoFiles();
         assertThat("Photo files must not be null.", photoFiles != null);
+    }
+
+    @Test
+    public void checkSearch()
+    {
+        String test_query = "asdf";
+        ArrayList<File> photoFiles = activityRule.getActivity().getAllPhotoFiles();
+
+        onView(withId(R.id.search_images)).perform(click()).perform(typeText(test_query));
+        for (File f : activityRule.getActivity().getPhotoAdapter().getFilteredImageList())
+        {
+            assertTrue(f.getName().toLowerCase().trim().contains(test_query.toLowerCase().trim()));
+        }
     }
 }

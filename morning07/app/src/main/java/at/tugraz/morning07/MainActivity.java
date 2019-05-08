@@ -16,17 +16,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.SearchView;
-import android.widget.Toast;
-import android.net.Uri;
-import android.widget.Button;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.widget.ImageView;
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
-import at.tugraz.morning07.R;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -130,6 +121,10 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+    }
+
+    public PhotoAdapter getPhotoAdapter() {
+        return photoAdapter;
     }
 
 
