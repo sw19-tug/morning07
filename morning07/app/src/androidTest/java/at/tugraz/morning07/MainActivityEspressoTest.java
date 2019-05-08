@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -48,33 +49,7 @@ public class MainActivityEspressoTest
     @Test
     public void checkFiles()
     {
-        File[] photoFiles = activityRule.getActivity().getAllPhotoFiles();
+        ArrayList<File> photoFiles = activityRule.getActivity().getAllPhotoFiles();
         assertThat("Photo files must not be null.", photoFiles != null);
-    }
-
-    @Test
-    public void checkFilePaths()
-    {
-        File[] photoFiles = activityRule.getActivity().getAllPhotoFiles();
-        String[] photoFilesPaths = activityRule.getActivity().getPhotoFilesPaths(photoFiles);
-        assertThat("Photo file paths must not be null.", photoFilesPaths != null);
-    }
-
-    @Test
-    public void checkFilePathsIfImages()
-    {
-        File[] photoFiles = activityRule.getActivity().getAllPhotoFiles();
-        String[] photoFilesPaths = activityRule.getActivity().getPhotoFilesPaths(photoFiles);
-
-        for(int i = 0; i < photoFilesPaths.length; i++)
-        {
-            assertThat("Photo file paths must end with valid endings",
-                    photoFilesPaths[i].endsWith(".gif") ||
-                    photoFilesPaths[i].endsWith(".jpg") ||
-                    photoFilesPaths[i].endsWith(".jpeg") ||
-                    photoFilesPaths[i].endsWith(".png") ||
-                    photoFilesPaths[i].endsWith(".webp"));
-
-        }
     }
 }
