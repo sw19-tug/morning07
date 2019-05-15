@@ -48,6 +48,15 @@
         tools:layout_editor_absoluteY="0dp"
         android:visibility="invisible" />
 
+    <Button
+        android:id="@+id/cropButton"
+        android:layout_width="62dp"
+        android:layout_height="52dp"
+        android:onClick="crop"
+        android:text="crop"
+        tools:layout_editor_absoluteX="140dp"
+        tools:layout_editor_absoluteY="0dp" />
+
     </LinearLayout>
 
     <Button

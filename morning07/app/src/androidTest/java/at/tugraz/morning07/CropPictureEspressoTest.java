@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -18,5 +19,11 @@ public class CropPictureEspressoTest {
     public void testCropButtonVisible()
     {
         onView(withId(R.id.cropButton)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testCropButtonWorks()
+    {
+        onView(withId(R.id.cropButton)).perform(click());
     }
 }
