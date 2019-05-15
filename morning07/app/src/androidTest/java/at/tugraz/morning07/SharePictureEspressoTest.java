@@ -27,10 +27,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 public class SharePictureEspressoTest {
     @Rule
-    public ActivityTestRule<BigImageActivity> activityTestRule = new ActivityTestRule<>(BigImageActivity.class);
+    public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Rule
-    public IntentsTestRule<BigImageActivity> mActivity = new IntentsTestRule<BigImageActivity>(BigImageActivity.class) {
+    public IntentsTestRule<MainActivity> mActivity = new IntentsTestRule<MainActivity>(MainActivity.class) {
         @Override
         protected Intent getActivityIntent() {
             Intent intent = new Intent();
@@ -48,7 +48,8 @@ public class SharePictureEspressoTest {
 
     @Test
     public void testShareIntent() {
-        onView(withId(R.id.shareButton)).check(matches(isDisplayed())).perform(click());
         intended(anyIntent(), times(1));
+        onView(withId(R.id.shareButton)).check(matches(isDisplayed())).perform(click());
+        intended(anyIntent(), times(2));
     }
 }
