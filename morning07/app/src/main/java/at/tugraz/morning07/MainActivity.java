@@ -9,35 +9,25 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
-import android.net.Uri;
-import android.widget.Button;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.widget.ImageView;
+import android.widget.SearchView;
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity
 {
     private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 1;
 
-    private File[] photoFiles;
-    private String[] photoFilesPaths;
+    private ArrayList<File> photoFiles = new ArrayList<>();
     protected GridView photoGridView;
     protected PhotoAdapter photoAdapter;
 
     public static int width = 0;
-
-    private Button shareButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -98,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         return files;
     }
 
-    File[] getAllPhotoFiles() {
+    ArrayList<File> getAllPhotoFiles() {
         String[] directories = {
                 Environment.DIRECTORY_DCIM,
                 Environment.DIRECTORY_PICTURES
@@ -109,23 +99,11 @@ public class MainActivity extends AppCompatActivity
             File directory = Environment.getExternalStoragePublicDirectory(directoryName);
             photoFiles.addAll(getPhotoFiles(directory));
         }
-        return photoFiles.toArray(new File[photoFiles.size()]);
-    }
-
-    String[] getPhotoFilesPaths(File[] files) {
-        if (files == null) {
-            return  null;
-        }
-        String[] filePaths = new String[files.length];
-        for (int i = 0; i < files.length; i++) {
-            filePaths[i] = files[i].getAbsolutePath();
-        }
-        return filePaths;
+        return photoFiles;
     }
 
     void loadPhotosFromStorage() {
         photoFiles = getAllPhotoFiles();
-        photoFilesPaths = getPhotoFilesPaths(photoFiles);
 
         setupPhotoGridView();
     }
@@ -136,20 +114,23 @@ public class MainActivity extends AppCompatActivity
         width = Math.min(getWindowManager().getDefaultDisplay().getWidth(), getWindowManager().getDefaultDisplay().getHeight());
         photoGridView = findViewById(R.id.photoGridView);
         photoGridView.setColumnWidth(width/4 - 8*5);
-        photoAdapter = new PhotoAdapter(this, photoFilesPaths);
+        photoAdapter = new PhotoAdapter(this, photoFiles);
         photoGridView.setAdapter(photoAdapter);
         photoGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 PhotoAdapter adapter = (PhotoAdapter) parent.getAdapter();
-                String filepath = adapter.getItem(position);
-                File photo = new File(filepath);
+                String filepath = adapter.getPathFromItem(position);
                 Intent intent = new Intent(MainActivity.this,BigImageActivity.class);
-                intent.putExtra("filenpath", filepath);
+                intent.putExtra("filepath", filepath);
                 startActivity(intent);
             }
         });
+    }
+
+    public PhotoAdapter getPhotoAdapter() {
+        return photoAdapter;
     }
 
 
@@ -168,5 +149,27 @@ public class MainActivity extends AppCompatActivity
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem item = menu.findItem(R.id.search_images);
+        SearchView searchView = (SearchView)item.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                photoAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        return true;
     }
 }
