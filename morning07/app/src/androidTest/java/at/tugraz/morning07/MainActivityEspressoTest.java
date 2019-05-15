@@ -9,11 +9,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -48,33 +53,20 @@ public class MainActivityEspressoTest
     @Test
     public void checkFiles()
     {
-        File[] photoFiles = activityRule.getActivity().getAllPhotoFiles();
+        ArrayList<File> photoFiles = activityRule.getActivity().getAllPhotoFiles();
         assertThat("Photo files must not be null.", photoFiles != null);
     }
 
     @Test
-    public void checkFilePaths()
+    public void checkSearch()
     {
-        File[] photoFiles = activityRule.getActivity().getAllPhotoFiles();
-        String[] photoFilesPaths = activityRule.getActivity().getPhotoFilesPaths(photoFiles);
-        assertThat("Photo file paths must not be null.", photoFilesPaths != null);
-    }
+        String test_query = "asdf";
+        ArrayList<File> photoFiles = activityRule.getActivity().getAllPhotoFiles();
 
-    @Test
-    public void checkFilePathsIfImages()
-    {
-        File[] photoFiles = activityRule.getActivity().getAllPhotoFiles();
-        String[] photoFilesPaths = activityRule.getActivity().getPhotoFilesPaths(photoFiles);
-
-        for(int i = 0; i < photoFilesPaths.length; i++)
+        onView(withId(R.id.search_images)).perform(click()).perform(typeText(test_query));
+        for (File f : activityRule.getActivity().getPhotoAdapter().getFilteredImageList())
         {
-            assertThat("Photo file paths must end with valid endings",
-                    photoFilesPaths[i].endsWith(".gif") ||
-                    photoFilesPaths[i].endsWith(".jpg") ||
-                    photoFilesPaths[i].endsWith(".jpeg") ||
-                    photoFilesPaths[i].endsWith(".png") ||
-                    photoFilesPaths[i].endsWith(".webp"));
-
+            assertTrue(f.getName().toLowerCase().trim().contains(test_query.toLowerCase().trim()));
         }
     }
 }
