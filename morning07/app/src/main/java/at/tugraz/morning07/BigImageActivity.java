@@ -2,6 +2,7 @@ package at.tugraz.morning07;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -18,10 +19,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class BigImageActivity extends AppCompatActivity {
@@ -68,7 +71,7 @@ public class BigImageActivity extends AppCompatActivity {
         this.bigView = (ImageView) findViewById(R.id.big_image);
         Intent intent = getIntent();
         if(intent != null){
-            String message = intent.getStringExtra("filenpath");
+            String message = intent.getStringExtra("filepath");
             if(message != null) {
                 imgFile = new File(message);
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
@@ -118,14 +121,21 @@ public class BigImageActivity extends AppCompatActivity {
         System.out.println("filepath: "+Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES));
 
-        String manufacturer = Build.MANUFACTURER;
-        String model = Build.MODEL;
-        int version = Build.VERSION.SDK_INT;
-        String versionRelease = Build.VERSION.RELEASE;
-
         FileOutputStream fos = new FileOutputStream(imgFile);
-        fos.write(bitmapdata);
-        fos.flush();
-        fos.close();
+        Context context = getApplicationContext();
+        CharSequence text;
+        try {
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+            text = "Saved Successfully";
+
+        }
+        catch(IOException io) {
+            text = "Error when Saving";
+        }
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
 }
