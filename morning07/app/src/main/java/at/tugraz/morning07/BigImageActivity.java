@@ -32,6 +32,8 @@ import java.util.ArrayList;
 
 public class BigImageActivity extends AppCompatActivity {
 
+    final int CROPPING = 1;
+
     int turnRatio = 0;
 
     private Button shareButton;
@@ -187,5 +189,22 @@ public class BigImageActivity extends AppCompatActivity {
     public void crop(View view)
     {
         System.out.println("crop function");
+        Intent cropIntent = new Intent("com.android.camera.action.CROP");
+        cropIntent.setDataAndType(Uri.parse(imgFile.getAbsolutePath()), "image/*");
+        cropIntent.putExtra("crop", "true");
+        cropIntent.putExtra("aspectX", 1);
+        cropIntent.putExtra("aspectY", 1);
+        cropIntent.putExtra("outputX", 256);
+        cropIntent.putExtra("outputY", 256);
+        cropIntent.putExtra("return-data", true);
+        startActivityForResult(cropIntent, CROPPING);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == CROPPING) {
+            Bundle extras = data.getExtras();
+            Bitmap cropped_pic = extras.getParcelable("data");
+            bigView.setImageBitmap(cropped_pic);
+        }
     }
 }
