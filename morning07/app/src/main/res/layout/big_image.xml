@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -20,18 +20,47 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:src="@drawable/index" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/turnButton"
+        android:text="turn"
+        android:layout_width="62dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="17dp"
+        tools:layout_editor_absoluteX="00dp"
+        tools:layout_editor_absoluteY="0dp"
+        android:onClick="turn"
+        />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="62dp"
+        android:layout_height="52dp"
+        android:onClick="save"
+        android:text="save"
+        tools:layout_editor_absoluteX="70dp"
+        tools:layout_editor_absoluteY="0dp"
+        android:visibility="invisible" />
+
     </LinearLayout>
 
     <Button
         android:id="@+id/shareButton"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:layout_marginEnd="17dp"
         android:contentDescription="sha"
         android:drawableEnd="@android:drawable/ic_menu_share"
-        android:gravity="center_horizontal|top"
+        android:gravity="right"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="16dp" />
+
+
 
 </android.support.constraint.ConstraintLayout>
