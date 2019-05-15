@@ -34,6 +34,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAct
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -55,29 +56,6 @@ public class AddPictureEspressoTest {
 
     @Test
     public void testClickPhotoButton() {
-        onView(withId(R.id.openCameraActionButton)).perform(click());
-    }
-
-    @Test
-    public void testCameraOpen() {
-        intended(hasAction(MediaStore.ACTION_IMAGE_CAPTURE));
-    }
-
-    //source: https://guides.codepath.com/android/UI-Testing-with-Espresso
-    @Test
-    public void testTakingPictureScenario() {
-        Bitmap icon = BitmapFactory.decodeResource(
-                InstrumentationRegistry.getTargetContext().getResources(),
-                R.mipmap.ic_launcher);
-
-        Intent resultData = new Intent();
-        resultData.putExtra("data", icon);
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
-
-        intending(toPackage("com.android.camera2")).respondWith(result);
-
-        onView(withId(R.id.openCameraActionButton)).perform(click());
-
-        intended(toPackage("com.android.camera2"));
+        onView(withId(R.id.openCameraActionButton)).check(matches(isClickable()));
     }
 }
