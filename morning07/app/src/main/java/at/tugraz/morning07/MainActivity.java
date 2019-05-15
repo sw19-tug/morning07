@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.widget.GridView;
 import android.widget.SearchView;
 import java.io.File;
 import java.util.ArrayList;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -54,6 +56,27 @@ public class MainActivity extends AppCompatActivity
         } else {
             // Permission has already been granted
             loadPhotosFromStorage();
+            setupOpenPhotoActionButton(true);
+        }
+
+    }
+
+    private void setupOpenPhotoActionButton(boolean enabled) {
+        FloatingActionButton openPhotoActionButton = findViewById(R.id.openCameraActionButton);
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY))
+        {
+            openPhotoActionButton.setVisibility(View.VISIBLE);
+            if (!enabled) {
+                openPhotoActionButton.setAlpha(.4f);
+                openPhotoActionButton.setEnabled(enabled);
+            } else {
+                openPhotoActionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dispatchTakePictureIntent();
+                    }
+                });
+            }
         }
     }
 
@@ -141,9 +164,11 @@ public class MainActivity extends AppCompatActivity
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     loadPhotosFromStorage();
+                    setupOpenPhotoActionButton(true);
                 } else {
                     // Permission denied
                     // Display empty grid view
+                    setupOpenPhotoActionButton(false);
                 }
                 break;
             default:
@@ -172,4 +197,8 @@ public class MainActivity extends AppCompatActivity
         });
         return true;
     }
+    private void dispatchTakePictureIntent() {
+
+    }
+
 }
