@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
 {
-    private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 1;
+    private static final int REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 1;
 
     private ArrayList<File> photoFiles = new ArrayList<>();
     protected GridView photoGridView;
@@ -35,21 +35,21 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Get whether to show UI with rationale for requesting a permission or not.
             // Probably second request where user has the chance to check 'Never ask again'.
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 // TODO: Show asynchronous explanation to the user
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
             } else {
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
             }
         } else {
             // Permission has already been granted
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case REQUEST_PERMISSION_READ_EXTERNAL_STORAGE:
+            case REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     loadPhotosFromStorage();

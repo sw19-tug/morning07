@@ -3,6 +3,7 @@ package at.tugraz.morning07;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -32,6 +34,7 @@ public class BigImageActivity extends AppCompatActivity {
     int turnRatio = 0;
 
     private Button shareButton;
+    private Button deleteButton;
     private Button saveButton;
     private ImageView bigView;
     private File imgFile;
@@ -42,7 +45,6 @@ public class BigImageActivity extends AppCompatActivity {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,8 @@ public class BigImageActivity extends AppCompatActivity {
 
         this.shareButton = this.findViewById(R.id.shareButton);
         this.saveButton = this.findViewById(R.id.saveButton);
+        this.deleteButton = this.findViewById(R.id.deleteButton);
+
         OnClickListenerShare shareListener = new OnClickListenerShare();
         ArrayList<Uri> imageUris = new ArrayList<>();
         File f = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
@@ -63,6 +67,46 @@ public class BigImageActivity extends AppCompatActivity {
                 this.shareButton.setOnClickListener(shareListener);
             }
         }
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                if(imgFile.exists())
+                                {
+                                    boolean success = imgFile.delete();
+                                    if(success)
+                                    {
+                                        Intent intent = new Intent(BigImageActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(getApplicationContext(), "file could not be deleted!",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                dialog.cancel();
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(BigImageActivity.this);
+                builder.setTitle(R.string.delete_dialog_title).setMessage("Are you sure?").setNegativeButton("No", dialogClickListener)
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .show();
+            }
+
+        });
     }
 
     @Override
