@@ -35,6 +35,8 @@ public class BigImageActivity extends AppCompatActivity {
     private ImageView bigView;
     private File imgFile;
 
+    private boolean saveAsNewFile = false;
+
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -120,7 +122,21 @@ public class BigImageActivity extends AppCompatActivity {
         System.out.println("filepath: "+Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES));
 
-        FileOutputStream fos = new FileOutputStream(imgFile);
+        FileOutputStream fos;
+        File newFile;
+        if(saveAsNewFile) {
+            String str = imgFile.getName();
+            String[] arr = str.split(".");
+            String filename = "";
+            for(int i = 0; i < arr.length - 1; i++)
+                filename += arr[i];
+            filename += "_" + System.currentTimeMillis() + "." + arr[arr.length - 1];
+            newFile = new File(imgFile.getParent() + File.pathSeparator + filename);
+            fos = new FileOutputStream(newFile);
+        }
+        else {
+            fos = new FileOutputStream(imgFile);
+        }
         Context context = getApplicationContext();
         CharSequence text;
         try {
@@ -128,11 +144,11 @@ public class BigImageActivity extends AppCompatActivity {
             fos.flush();
             fos.close();
             text = "Saved Successfully";
-
         }
         catch(IOException io) {
             text = "Error when Saving";
         }
+        saveAsNewFile = false;
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
@@ -144,6 +160,7 @@ public class BigImageActivity extends AppCompatActivity {
         BitmapDrawable source = (BitmapDrawable)bigView.getDrawable();
         Bitmap bm = Bitmap.createBitmap(source.getBitmap());
         bigView.setImageDrawable(new BitmapDrawable(toGreyScale(bm)));
+        saveAsNewFile = true;
     }
 
     public static Bitmap toGreyScale(Bitmap src){
