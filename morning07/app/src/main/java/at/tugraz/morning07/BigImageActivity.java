@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class BigImageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String message = intent.getStringExtra("filenpath");
 
-        File imgFile = new  File(message);
+        final File imgFile = new  File(message);
         imageUris.add(Uri.parse(imgFile.getAbsolutePath()));
         shareListener.setImageArray(imageUris);
         this.shareButton.setOnClickListener(shareListener);
@@ -44,24 +45,40 @@ public class BigImageActivity extends AppCompatActivity {
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
         public void onClick(View v) {
-            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which){
                         case DialogInterface.BUTTON_POSITIVE:
                             //Yes button clicked
+                            if(imgFile.exists())
+                            {
+                                boolean success = imgFile.delete();
+                                if(success)
+                                {
+                                    Intent intent = new Intent(BigImageActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }
+                                else
+                                {
+                                    Toast.makeText(getApplicationContext(), "file could not be deleted!",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
                             break;
 
                         case DialogInterface.BUTTON_NEGATIVE:
                             //No button clicked
+                            dialog.cancel();
                             break;
                     }
                 }
             };
 
             AlertDialog.Builder builder = new AlertDialog.Builder(BigImageActivity.this);
-            builder.setTitle(R.string.delete_dialog_title).setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
-                    .setNegativeButton("No", dialogClickListener).show();
+            builder.setTitle(R.string.delete_dialog_title).setMessage("Are you sure?").setNegativeButton("No", dialogClickListener)
+                    .setPositiveButton("Yes", dialogClickListener)
+                    .show();
         }
 
         });

@@ -27,7 +27,6 @@ public class DeletePictureEspressoTest {
 
     @Test
     public void isVisibleDeleteButton(){
-        GridView view = activityRule.getActivity().photoGridView;
 
         onData(anything()).inAdapterView(withId(R.id.photoGridView)).atPosition(0).perform(click());
 
