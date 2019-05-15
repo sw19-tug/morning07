@@ -25,28 +25,40 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:layout_marginEnd="17dp"
+        >
 
     <Button
         android:id="@+id/turnButton"
         android:text="turn"
-        android:layout_width="62dp"
-        android:layout_height="52dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginEnd="17dp"
-        tools:layout_editor_absoluteX="00dp"
-        tools:layout_editor_absoluteY="0dp"
         android:onClick="turn"
+        android:textSize="10sp"
+        />
+
+    <Button
+        android:id="@+id/blackAndWhiteButton"
+        android:onClick="blackAndWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="Black and White"
+        android:layout_marginEnd="17dp"
+        android:textSize="10sp"
         />
 
     <Button
         android:id="@+id/saveButton"
-        android:layout_width="62dp"
-        android:layout_height="52dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:onClick="save"
         android:text="save"
-        tools:layout_editor_absoluteX="70dp"
-        tools:layout_editor_absoluteY="0dp"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_marginEnd="17dp"
+        android:textSize="10sp"/>
 
     </LinearLayout>
 
@@ -60,6 +72,7 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="16dp" />
+
 
 
 

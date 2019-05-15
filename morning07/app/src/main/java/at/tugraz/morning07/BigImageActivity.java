@@ -7,15 +7,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -137,5 +136,33 @@ public class BigImageActivity extends AppCompatActivity {
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+    }
+
+    public void blackAndWhite(View view) throws Exception
+    {
+        saveButton.setVisibility(View.VISIBLE);
+        BitmapDrawable source = (BitmapDrawable)bigView.getDrawable();
+        Bitmap bm = Bitmap.createBitmap(source.getBitmap());
+        bigView.setImageDrawable(new BitmapDrawable(toGreyScale(bm)));
+    }
+
+    public static Bitmap toGreyScale(Bitmap src){
+        int width = src.getWidth();
+        int height = src.getHeight();
+        Bitmap result = Bitmap.createBitmap(width, height, src.getConfig());
+        int A, R, G, B;
+        int pixel;
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                pixel = src.getPixel(x, y);
+                A = Color.alpha(pixel);
+                R = Color.red(pixel);
+                G = Color.green(pixel);
+                B = Color.blue(pixel);
+                int gray = (R +  G + B) / 3;
+                result.setPixel(x, y, Color.argb(A, gray, gray, gray));
+            }
+        }
+        return result;
     }
 }
