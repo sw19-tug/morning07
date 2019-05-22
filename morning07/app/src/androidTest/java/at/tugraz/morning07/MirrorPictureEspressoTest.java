@@ -16,8 +16,13 @@ public class MirrorPictureEspressoTest {
     public ActivityTestRule<BigImageActivity> activityRule = new ActivityTestRule<>(BigImageActivity.class);
 
     @Test
-    public void testTurnButtonVisible() {
-        onView(withId(R.id.mirrorButton)).check(matches(isDisplayed()));
+    public void testMirrorHorizontalButtonVisible() {
+        onView(withId(R.id.mirrorHorizontalButton)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testMirrorVerticalButtonVisible() {
+        onView(withId(R.id.mirrorVerticalButton)).check(matches(isDisplayed()));
     }
 
 }
