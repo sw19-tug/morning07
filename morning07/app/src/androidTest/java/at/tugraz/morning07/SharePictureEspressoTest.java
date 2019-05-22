@@ -20,17 +20,17 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
- * Instrumented test, which will execute on an Android device.
+ * Instrumented toGreyScale, which will execute on an Android device.
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
 public class SharePictureEspressoTest {
     @Rule
-    public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<BigImageActivity> activityTestRule = new ActivityTestRule<>(BigImageActivity.class);
 
     @Rule
-    public IntentsTestRule<MainActivity> mActivity = new IntentsTestRule<MainActivity>(MainActivity.class) {
+    public IntentsTestRule<BigImageActivity> mActivity = new IntentsTestRule<BigImageActivity>(BigImageActivity.class) {
         @Override
         protected Intent getActivityIntent() {
             Intent intent = new Intent();
@@ -48,8 +48,7 @@ public class SharePictureEspressoTest {
 
     @Test
     public void testShareIntent() {
-        intended(anyIntent(), times(1));
         onView(withId(R.id.shareButton)).check(matches(isDisplayed())).perform(click());
-        intended(anyIntent(), times(2));
+        intended(anyIntent(), times(1));
     }
 }
