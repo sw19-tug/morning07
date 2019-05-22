@@ -30,7 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class BigImageActivity extends AppCompatActivity {
+public class BigImageActivity extends AppCompatActivity implements View.OnClickListener {
 
     final int CROPPING = 1;
 
@@ -39,6 +39,7 @@ public class BigImageActivity extends AppCompatActivity {
     private Button shareButton;
     private Button deleteButton;
     private Button saveButton;
+    private Button cropButton;
     private ImageView bigView;
     private File imgFile;
 
@@ -56,6 +57,8 @@ public class BigImageActivity extends AppCompatActivity {
         this.shareButton = this.findViewById(R.id.shareButton);
         this.saveButton = this.findViewById(R.id.saveButton);
         this.deleteButton = this.findViewById(R.id.deleteButton);
+        this.cropButton = this.findViewById(R.id.cropButton);
+        cropButton.setOnClickListener(this);
 
         OnClickListenerShare shareListener = new OnClickListenerShare();
         ArrayList<Uri> imageUris = new ArrayList<>();
@@ -110,6 +113,12 @@ public class BigImageActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        crop();
+
     }
 
     @Override
@@ -186,25 +195,40 @@ public class BigImageActivity extends AppCompatActivity {
         toast.show();
     }
 
-    public void crop(View view)
+    public void crop()
     {
-        System.out.println("crop function");
-        Intent cropIntent = new Intent("com.android.camera.action.CROP");
-        cropIntent.setDataAndType(Uri.parse(imgFile.getAbsolutePath()), "image/*");
-        cropIntent.putExtra("crop", "true");
-        cropIntent.putExtra("aspectX", 1);
-        cropIntent.putExtra("aspectY", 1);
-        cropIntent.putExtra("outputX", 256);
-        cropIntent.putExtra("outputY", 256);
-        cropIntent.putExtra("return-data", true);
-        startActivityForResult(cropIntent, CROPPING);
+        try
+        {
+            System.out.println("crop function");
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            cropIntent.setDataAndType(Uri.fromFile(imgFile), "image/*");
+            cropIntent.putExtra("crop", true);
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            cropIntent.putExtra("return-data", true);
+
+            startActivityForResult(cropIntent, CROPPING);
+        }
+        catch (ActivityNotFoundException anfe) {
+            String errorM = "your device does not support crop!";
+            Toast toast = Toast.makeText(this, errorM, Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == CROPPING) {
-            Bundle extras = data.getExtras();
-            Bitmap cropped_pic = extras.getParcelable("data");
-            bigView.setImageBitmap(cropped_pic);
+
+        System.out.printf("onAcitvityResult %d", requestCode);
+        if (resultCode == RESULT_OK) {
+            System.out.println("Result OK");
+            if (requestCode == CROPPING) {
+                System.out.println("CROPPING");
+                Bundle extras = data.getExtras();
+                Bitmap cropped_pic = extras.getParcelable("data");
+                bigView.setImageBitmap(cropped_pic);
+            }
         }
     }
 }
