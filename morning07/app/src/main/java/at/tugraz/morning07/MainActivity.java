@@ -179,7 +179,16 @@ public class MainActivity extends AppCompatActivity
         photoGridView.setMultiChoiceModeListener(new GridView.MultiChoiceModeListener(){
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                mode.setSubtitle("coming soon...");
+                int selectCount = photoGridView.getCheckedItemCount();
+
+                switch (selectCount) {
+                    case 1:
+                        mode.setSubtitle("One item selected");
+                        break;
+                    default:
+                        mode.setSubtitle("" + selectCount + " items selected");
+                        break;
+                }
 
                 if(checked){
                     ImageView tv = (ImageView) photoGridView.getChildAt(position);
