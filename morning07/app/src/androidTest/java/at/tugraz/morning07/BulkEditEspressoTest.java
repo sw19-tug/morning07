@@ -14,6 +14,7 @@ import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
@@ -26,6 +27,7 @@ public class BulkEditEspressoTest {
     @Test
     public void testSelectImage() {
         onData(anything()).inAdapterView(withId(R.id.photoGridView)).atPosition(0).perform(longClick());
-        onView(withId(R.menu.bulk_menu)).check(matches(isDisplayed()));
+        onData(anything()).inAdapterView(withId(R.id.photoGridView)).atPosition(1).perform(longClick());
+        onView(withId(R.id.bulk_delete_images)).check(matches(isDisplayed()));
     }
 }

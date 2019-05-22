@@ -21,6 +21,8 @@ public class PhotoAdapter extends BaseAdapter implements Filterable
     private Context mContext;
     private final ArrayList<File> originalImageList;
     private ArrayList<File> filteredImageList;
+    public List selectedPositions;
+
     private int width_ = 0;
 
     public PhotoAdapter(Context c, ArrayList<File> files)
@@ -29,6 +31,7 @@ public class PhotoAdapter extends BaseAdapter implements Filterable
         originalImageList = new ArrayList<>(files);
         filteredImageList = files;
         width_ = MainActivity.width;
+        selectedPositions = new ArrayList<>();
     }
 
     public int getCount() {

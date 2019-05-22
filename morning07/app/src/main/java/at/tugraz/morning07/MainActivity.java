@@ -3,6 +3,12 @@ package at.tugraz.morning07;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.Rect;
+import android.icu.text.Normalizer2;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -10,14 +16,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ActionMode;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import java.io.File;
 import java.util.ArrayList;
@@ -162,6 +173,52 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(MainActivity.this,BigImageActivity.class);
                 intent.putExtra("filepath", filepath);
                 startActivity(intent);
+            }
+        });
+        photoGridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
+        photoGridView.setMultiChoiceModeListener(new GridView.MultiChoiceModeListener(){
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                mode.setSubtitle("coming soon...");
+
+                if(checked){
+                    ImageView tv = (ImageView) photoGridView.getChildAt(position);
+                    tv.setColorFilter(getResources().getColor(R.color.colorHighlighted));
+
+                }else{
+                    ImageView tv = (ImageView) photoGridView.getChildAt(position);
+                    tv.setColorFilter(Color.TRANSPARENT);
+                }
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater menuInflater =  mode.getMenuInflater();
+                menuInflater.inflate(R.menu.bulk_menu,menu);
+                mode.setTitle("Images Selected");
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                // Respond to clicks on the actions in the CAB
+                switch (item.getItemId()) {
+                    case R.id.deleteButton:
+                        //Get your menu item from the id
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
             }
         });
     }
