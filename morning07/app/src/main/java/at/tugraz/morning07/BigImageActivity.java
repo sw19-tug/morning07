@@ -126,9 +126,9 @@ public class BigImageActivity extends AppCompatActivity {
         File newFile;
         if(saveAsNewFile) {
             String str = imgFile.getName();
-            String[] arr = str.split(".");
-            String filename = "";
-            for(int i = 0; i < arr.length - 1; i++)
+            String[] arr = str.split("\\.");
+            String filename = arr[0];
+            for(int i = 1; i < arr.length - 1; i++)
                 filename += arr[i];
             filename += "_" + System.currentTimeMillis() + "." + arr[arr.length - 1];
             newFile = new File(imgFile.getParent() + File.pathSeparator + filename);
