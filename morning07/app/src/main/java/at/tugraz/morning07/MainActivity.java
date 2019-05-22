@@ -22,11 +22,9 @@ import android.widget.SearchView;
 import java.io.File;
 import java.util.ArrayList;
 import android.net.Uri;
-import android.widget.Button;
-import java.io.File;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
@@ -41,7 +39,7 @@ public class MainActivity extends AppCompatActivity
     protected GridView photoGridView;
     protected PhotoAdapter photoAdapter;
 
-    String takenPhotoPath;
+    File capturedPhoto;
 
     public static int width = 0;
 
@@ -221,7 +219,6 @@ public class MainActivity extends AppCompatActivity
                 ".jpg",
                 storageDir
         );
-        takenPhotoPath = image.getAbsolutePath();
         return image;
     }
 
@@ -229,15 +226,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_PERMISSION_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-
             // Save taken picture to system gallery
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            File f = new File(takenPhotoPath);
-            Uri contentUri = Uri.fromFile(f);
+            Uri contentUri = Uri.fromFile(capturedPhoto);
             mediaScanIntent.setData(contentUri);
             this.sendBroadcast(mediaScanIntent);
-
-            // TODO: Update grid view
+        } else {
+            capturedPhoto.delete();
+            capturedPhoto = null;
         }
     }
 
@@ -249,18 +245,17 @@ public class MainActivity extends AppCompatActivity
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
-            File photoFile = null;
             try {
-                photoFile = createImageFile();
+                capturedPhoto = createImageFile();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
             // Continue only if the File was successfully created
-            if (photoFile != null) {
+            if (capturedPhoto != null) {
                 Uri photoURI = FileProvider.getUriForFile(
                         this,
                         getApplicationContext().getPackageName() + ".provider",
-                        photoFile
+                        capturedPhoto
                 );
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_PERMISSION_IMAGE_CAPTURE);
