@@ -8,19 +8,31 @@
     tools:context=".MainActivity">
 
     <GridView
+        android:id="@+id/photoGridView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/photoGridView"
         android:columnWidth="100dp"
-        android:numColumns="auto_fit"
-        android:verticalSpacing="5dp"
-        android:horizontalSpacing="1dp"
-        android:padding="5dp"
         android:gravity="center"
+        android:horizontalSpacing="1dp"
+        android:numColumns="auto_fit"
+        android:padding="5dp"
         android:scrollingCache="true"
+        android:verticalSpacing="5dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"></GridView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/openCameraActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints">
-    </GridView>
+        app:srcCompat="@android:drawable/ic_menu_camera" />
 
 </android.support.constraint.ConstraintLayout>

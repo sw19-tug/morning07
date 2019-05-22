@@ -4,9 +4,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,14 +21,25 @@ import android.widget.GridView;
 import android.widget.SearchView;
 import java.io.File;
 import java.util.ArrayList;
+import android.net.Uri;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class MainActivity extends AppCompatActivity
 {
     private static final int REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 1;
 
+    private static final int REQUEST_PERMISSION_IMAGE_CAPTURE = 2;
+
     private ArrayList<File> photoFiles = new ArrayList<>();
     protected GridView photoGridView;
     protected PhotoAdapter photoAdapter;
+
+    File capturedPhoto;
 
     public static int width = 0;
 
@@ -54,6 +68,27 @@ public class MainActivity extends AppCompatActivity
         } else {
             // Permission has already been granted
             loadPhotosFromStorage();
+            setupOpenPhotoActionButton(true);
+        }
+
+    }
+
+    private void setupOpenPhotoActionButton(boolean enabled) {
+        FloatingActionButton openPhotoActionButton = findViewById(R.id.openCameraActionButton);
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY))
+        {
+            openPhotoActionButton.setVisibility(View.VISIBLE);
+            if (!enabled) {
+                openPhotoActionButton.setAlpha(.4f);
+                openPhotoActionButton.setEnabled(enabled);
+            } else {
+                openPhotoActionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dispatchTakePictureIntent();
+                    }
+                });
+            }
         }
     }
 
@@ -96,7 +131,7 @@ public class MainActivity extends AppCompatActivity
         ArrayList<File> photoFiles = new ArrayList<File>();
         for (int directoryIndex = 0; directoryIndex < directories.length; directoryIndex++) {
             String directoryName = directories[directoryIndex];
-            File directory = Environment.getExternalStoragePublicDirectory(directoryName);
+            File directory = getExternalStoragePublicDirectory(directoryName);
             photoFiles.addAll(getPhotoFiles(directory));
         }
         return photoFiles;
@@ -141,9 +176,11 @@ public class MainActivity extends AppCompatActivity
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     loadPhotosFromStorage();
+                    setupOpenPhotoActionButton(true);
                 } else {
                     // Permission denied
                     // Display empty grid view
+                    setupOpenPhotoActionButton(false);
                 }
                 break;
             default:
@@ -172,4 +209,58 @@ public class MainActivity extends AppCompatActivity
         });
         return true;
     }
+    
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+        return image;
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_PERMISSION_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            // Save taken picture to system gallery
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri contentUri = Uri.fromFile(capturedPhoto);
+            mediaScanIntent.setData(contentUri);
+            this.sendBroadcast(mediaScanIntent);
+        } else {
+            capturedPhoto.delete();
+            capturedPhoto = null;
+        }
+    }
+
+
+
+    private void dispatchTakePictureIntent() {
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            try {
+                capturedPhoto = createImageFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (capturedPhoto != null) {
+                Uri photoURI = FileProvider.getUriForFile(
+                        this,
+                        getApplicationContext().getPackageName() + ".provider",
+                        capturedPhoto
+                );
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_PERMISSION_IMAGE_CAPTURE);
+            }
+        }
+    }
+
 }
