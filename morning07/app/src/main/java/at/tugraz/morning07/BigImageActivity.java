@@ -144,6 +144,9 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public boolean onLongClick(View v) {
                 Intent intent = new Intent(BigImageActivity.this, PopUp.class);
+                intent.putExtra("filename", imgFile.getName());
+                intent.putExtra("date", imgFile.lastModified());
+                intent.putExtra("size", imgFile.length());
                 startActivity(intent);
                 return true;
             }
