@@ -43,7 +43,9 @@
             </meta-data>
         </provider>
 
-        <activity android:name=".PopUp"></activity>
+        <activity android:name=".PopUp"
+            android:theme="@style/AppTheme.CustomTheme"
+        ></activity>
     </application>
 
 </manifest>

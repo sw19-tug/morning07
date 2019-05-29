@@ -61,15 +61,6 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
         this.cropButton = this.findViewById(R.id.cropButton);
         cropButton.setOnClickListener(this);
 
-        bigView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Intent intent = new Intent(BigImageActivity.this, PopUp.class);
-                startActivity(intent);
-                return true;
-            }
-        });
-
         OnClickListenerShare shareListener = new OnClickListenerShare();
         ArrayList<Uri> imageUris = new ArrayList<>();
         File f = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
@@ -147,6 +138,16 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
         else{
             bigView.setImageResource(R.drawable.prev2);
         }
+
+        bigView.setClickable(true);
+        bigView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(BigImageActivity.this, PopUp.class);
+                startActivity(intent);
+                return true;
+            }
+        });
     }
 
     public void turn(View view)
