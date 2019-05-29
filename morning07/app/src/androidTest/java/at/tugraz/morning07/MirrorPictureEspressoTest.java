@@ -72,7 +72,7 @@ public class MirrorPictureEspressoTest {
             }
         }
 
-        onView(withId(R.id.mirrorHorizontalButton)).perform(click());
+        onView(withId(R.id.mirrorVerticalButton)).perform(click());
         onView(withId(R.id.big_image)).check(matches(isMirrored(mirrored_original)));
     }
 }
