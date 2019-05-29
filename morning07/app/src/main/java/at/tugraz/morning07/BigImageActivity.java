@@ -35,7 +35,7 @@ public class BigImageActivity extends AppCompatActivity {
     private Button shareButton;
     private Button deleteButton;
     private Button saveButton;
-    private ImageView bigView;
+    protected ImageView bigView;
     private File imgFile;
 
     private boolean saveAsNewFile = false;
