@@ -1,6 +1,7 @@
 package at.tugraz.morning07;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -9,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.icu.text.Normalizer2;
+import android.os.Debug;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -17,8 +19,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Display;
 import android.view.Menu;
@@ -181,7 +185,6 @@ public class MainActivity extends AppCompatActivity
         photoGridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
         photoGridView.setMultiChoiceModeListener(new GridView.MultiChoiceModeListener(){
 
-            ArrayList<ImageView> iv_list = new ArrayList<>();
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
                 int selectCount = photoGridView.getCheckedItemCount();
@@ -199,12 +202,12 @@ public class MainActivity extends AppCompatActivity
                 if(checked){
                     ImageView tv = (ImageView) photoGridView.getChildAt(position);
                     tv.setColorFilter(getResources().getColor(R.color.colorHighlighted));
-                    iv_list.add(tv);
+                    photoAdapter.selectedPositions.add(position);
 
                 }else{
                     ImageView tv = (ImageView) photoGridView.getChildAt(position);
                     tv.setColorFilter(Color.TRANSPARENT);
-                    iv_list.remove(tv);
+                    photoAdapter.selectedPositions.remove(new Integer(position));
                 }
             }
 
@@ -226,9 +229,7 @@ public class MainActivity extends AppCompatActivity
                 // Respond to clicks on the actions in the CAB
                 switch (item.getItemId()) {
                     case R.id.menu_delete:
-                        // Single menu item is selected do something
-                        // Ex: launching new activity/screen or show alert message
-                        Toast.makeText(MainActivity.this, "Delete", Toast.LENGTH_SHORT).show();
+                        bulkDelete();
                         return true;
 
                     case R.id.menu_share:
@@ -245,11 +246,14 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                for(ImageView tv : iv_list)
+
+                Log.v("MS",photoAdapter.selectedPositions.toString());
+                for(int i = 0; i < photoAdapter.selectedPositions.size(); i++)
                 {
+                    ImageView tv = (ImageView) photoGridView.getChildAt(photoAdapter.selectedPositions.get(i));
                     tv.setColorFilter(Color.TRANSPARENT);
                 }
-
+                photoAdapter.selectedPositions.clear();
             }
         });
     }
@@ -355,6 +359,48 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(takePictureIntent, REQUEST_PERMISSION_IMAGE_CAPTURE);
             }
         }
+    }
+
+    private void bulkDelete(){
+        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //Yes button clicked
+                        for(int i = 0; i < photoAdapter.selectedPositions.size(); i++)
+                        {
+                            File imgFile = photoAdapter.getItem(photoAdapter.selectedPositions.get(i));
+                            if(imgFile.exists())
+                            {
+                                boolean success = imgFile.delete();
+                                if(success)
+                                {
+                                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }
+                                else
+                                {
+                                    Toast.makeText(getApplicationContext(), "file could not be deleted!",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        dialog.cancel();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(R.string.delete_dialog_title).setMessage("Are you sure?").setNegativeButton("No", dialogClickListener)
+                .setPositiveButton("Yes", dialogClickListener)
+                .show();
+
+        Toast.makeText(MainActivity.this, "Delete", Toast.LENGTH_SHORT).show();
     }
 
 }

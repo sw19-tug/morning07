@@ -21,7 +21,7 @@ public class PhotoAdapter extends BaseAdapter implements Filterable
     private Context mContext;
     private final ArrayList<File> originalImageList;
     private ArrayList<File> filteredImageList;
-    public List selectedPositions;
+    public List<Integer> selectedPositions;
 
     private int width_ = 0;
 
