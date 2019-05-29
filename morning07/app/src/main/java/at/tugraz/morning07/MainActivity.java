@@ -1,17 +1,23 @@
 package at.tugraz.morning07;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.icu.text.Normalizer2;
+import android.media.Image;
 import android.os.Debug;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -34,7 +40,10 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SearchView;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import android.net.Uri;
 import android.widget.Button;
@@ -233,12 +242,17 @@ public class MainActivity extends AppCompatActivity
                         return true;
 
                     case R.id.menu_share:
-                        Toast.makeText(MainActivity.this, "Share", Toast.LENGTH_SHORT).show();
+                        bulkShare();
                         return true;
 
-                    case R.id.menu_turn:
-                        Toast.makeText(MainActivity.this, "Turn", Toast.LENGTH_SHORT).show();
+                    case R.id.menu_turn_left:
+                        bulkRotate(true);
                         return true;
+
+                    case R.id.menu_turn_right:
+                        bulkRotate(false);
+                        return true;
+
                     default:
                         return false;
                 }
@@ -381,7 +395,7 @@ public class MainActivity extends AppCompatActivity
                                 }
                                 else
                                 {
-                                    Toast.makeText(getApplicationContext(), "file could not be deleted!",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Some files could not be deleted!",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }
@@ -400,7 +414,80 @@ public class MainActivity extends AppCompatActivity
                 .setPositiveButton("Yes", dialogClickListener)
                 .show();
 
-        Toast.makeText(MainActivity.this, "Delete", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Deleted Images", Toast.LENGTH_SHORT).show();
     }
 
+    private void bulkShare() {
+        ArrayList<Uri> imageUris = new ArrayList<>();
+        for(int i = 0; i < photoAdapter.selectedPositions.size(); i++)
+        {
+            File imgFile = photoAdapter.getItem(photoAdapter.selectedPositions.get(i));
+            imageUris.add(Uri.parse(imgFile.getAbsolutePath()));
+        }
+
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+        shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        shareIntent.setType("image/*");
+        photoGridView.getContext().startActivity(Intent.createChooser(shareIntent, "Share images to.."));
+    }
+
+    private void bulkRotate(Boolean is_left) {
+        int turnRatio = 0;
+        if(is_left)
+            turnRatio -= 90;
+        else
+            turnRatio += 90;
+
+        for(int i = 0; i < photoAdapter.selectedPositions.size(); i++)
+        {
+            File imgFile = photoAdapter.getItem(photoAdapter.selectedPositions.get(i));
+            ImageView temp_view = (ImageView) photoGridView.getChildAt(photoAdapter.selectedPositions.get(i));
+            temp_view.setRotation(turnRatio == 360 ? 0 : turnRatio);
+            try {
+                bulkSave(temp_view, imgFile);
+            }
+            catch(Exception io)
+            {
+                Toast toast = Toast.makeText(getApplicationContext(), "Saving failed " + imgFile.toString(), Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }
+        loadPhotosFromStorage();
+    }
+
+    private void bulkSave(ImageView view, File imgFile) throws Exception
+    {
+        BigImageActivity.verifyStoragePermissions(this);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(view.getRotation());
+        BitmapDrawable source = (BitmapDrawable)view.getDrawable();
+        Bitmap bm = Bitmap.createBitmap(source.getBitmap(), 0 ,0,
+                source.getBitmap().getWidth(), source.getBitmap().getHeight(), matrix, true);
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 0, bos);
+        byte[] bitmapdata = bos.toByteArray();
+
+        System.out.println("filepath: "+Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES));
+
+        FileOutputStream fos = new FileOutputStream(imgFile);
+        Context context = getApplicationContext();
+        CharSequence text;
+        try {
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+            text = "Saved Successfully";
+
+        }
+        catch(IOException io) {
+            text = "Error when Saving";
+        }
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
 }
