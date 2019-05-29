@@ -282,6 +282,7 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
                 catch (Exception e)
                 {
                     String errorM = "Could not save file!";
+                    System.out.printf("Exception: %s", e);
                     Toast toast = Toast.makeText(this, errorM, Toast.LENGTH_SHORT);
                     toast.show();
                 }

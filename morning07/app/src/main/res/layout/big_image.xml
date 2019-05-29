@@ -35,10 +35,18 @@
         android:text="turn"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginEnd="17dp"
+        android:layout_marginEnd="0dp"
         android:onClick="turn"
         android:textSize="10sp"
         />
+
+    <Button
+        android:id="@+id/cropButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="crop"
+        tools:layout_editor_absoluteX="140dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <Button
         android:id="@+id/blackAndWhiteButton"
@@ -46,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:text="Black and White"
-        android:layout_marginEnd="17dp"
+        android:layout_marginEnd="0dp"
         android:textSize="10sp"
         />
 
@@ -60,13 +68,7 @@
         android:layout_marginEnd="17dp"
         android:textSize="10sp"/>
 
-    <Button
-        android:id="@+id/cropButton"
-        android:layout_width="62dp"
-        android:layout_height="52dp"
-        android:text="crop"
-        tools:layout_editor_absoluteX="140dp"
-        tools:layout_editor_absoluteY="0dp" />
+
 
     </LinearLayout>
 
