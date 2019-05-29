@@ -255,7 +255,7 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
 
             startActivityForResult(cropIntent, CROPPING);
         }
-        catch (ActivityNotFoundException anfe) {
+        catch (Exception e) {
             String errorM = "your device does not support crop!";
             Toast toast = Toast.makeText(this, errorM, Toast.LENGTH_SHORT);
             toast.show();
@@ -265,13 +265,26 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         System.out.printf("onAcitvityResult %d", requestCode);
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK)
+        {
             System.out.println("Result OK");
-            if (requestCode == CROPPING) {
+            if (requestCode == CROPPING)
+            {
                 System.out.println("CROPPING");
                 Bundle extras = data.getExtras();
                 Bitmap cropped_pic = extras.getParcelable("data");
                 bigView.setImageBitmap(cropped_pic);
+                saveAsNewFile = true;
+                try
+                {
+                    save(null);
+                }
+                catch (Exception e)
+                {
+                    String errorM = "Could not save file!";
+                    Toast toast = Toast.makeText(this, errorM, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         }
     }
