@@ -34,6 +34,8 @@ import java.io.File;
 import java.util.ArrayList;
 import android.net.Uri;
 import android.widget.Button;
+import android.widget.Toast;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -223,8 +225,18 @@ public class MainActivity extends AppCompatActivity
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 // Respond to clicks on the actions in the CAB
                 switch (item.getItemId()) {
-                    case R.id.deleteButton:
-                        //Get your menu item from the id
+                    case R.id.menu_delete:
+                        // Single menu item is selected do something
+                        // Ex: launching new activity/screen or show alert message
+                        Toast.makeText(MainActivity.this, "Delete", Toast.LENGTH_SHORT).show();
+                        return true;
+
+                    case R.id.menu_share:
+                        Toast.makeText(MainActivity.this, "Share", Toast.LENGTH_SHORT).show();
+                        return true;
+
+                    case R.id.menu_turn:
+                        Toast.makeText(MainActivity.this, "Turn", Toast.LENGTH_SHORT).show();
                         return true;
                     default:
                         return false;
@@ -285,6 +297,7 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
+
         return true;
     }
     
