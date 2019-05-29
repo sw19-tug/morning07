@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
@@ -177,9 +178,12 @@ public class MainActivity extends AppCompatActivity
         });
         photoGridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
         photoGridView.setMultiChoiceModeListener(new GridView.MultiChoiceModeListener(){
+
+            ArrayList<ImageView> iv_list = new ArrayList<>();
             @Override
             public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
                 int selectCount = photoGridView.getCheckedItemCount();
+
 
                 switch (selectCount) {
                     case 1:
@@ -193,10 +197,12 @@ public class MainActivity extends AppCompatActivity
                 if(checked){
                     ImageView tv = (ImageView) photoGridView.getChildAt(position);
                     tv.setColorFilter(getResources().getColor(R.color.colorHighlighted));
+                    iv_list.add(tv);
 
                 }else{
                     ImageView tv = (ImageView) photoGridView.getChildAt(position);
                     tv.setColorFilter(Color.TRANSPARENT);
+                    iv_list.remove(tv);
                 }
             }
 
@@ -227,6 +233,10 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
+                for(ImageView tv : iv_list)
+                {
+                    tv.setColorFilter(Color.TRANSPARENT);
+                }
 
             }
         });
