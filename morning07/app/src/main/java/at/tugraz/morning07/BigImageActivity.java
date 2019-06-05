@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class BigImageActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -176,6 +177,23 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
         else{
             bigView.setImageResource(R.drawable.prev2);
         }
+
+        bigView.setClickable(true);
+        bigView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(BigImageActivity.this, PopUp.class);
+                intent.putExtra("filename", imgFile.getName());
+                Date lastModi = new Date(imgFile.lastModified());
+                intent.putExtra("date", lastModi.toString());
+                intent.putExtra("size", String.valueOf(imgFile.length() / 1024));
+                intent.putExtra("path", imgFile.getAbsolutePath());
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                intent.putExtra("resolution", myBitmap.getWidth() + " x " + myBitmap.getHeight());
+                startActivity(intent);
+                return true;
+            }
+        });
     }
 
     public void turn(View view)
