@@ -8,6 +8,4 @@
         android:title="Crop" />
     <item android:id="@+id/blackAndWhiteButton"
         android:title="Black and White" />
-    <item android:id="@+id/shareButton"
-        android:title="Share" />
 </menu>

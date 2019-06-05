@@ -44,12 +44,10 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
     int turnRatio = 0;
 
     private Button shareButton;
-    private Button deleteButton;
     private Button saveButton;
     protected ImageView bigView;
     private Button mirrorHorizontalButton;
     private Button mirrorVerticalButton;
-    private Button cropButton;
     private File imgFile;
 
     private boolean saveAsNewFile = false;
@@ -67,11 +65,8 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
 
         this.shareButton = this.findViewById(R.id.shareButton);
         this.saveButton = this.findViewById(R.id.saveButton);
-        this.deleteButton = this.findViewById(R.id.deleteButton);
         this.mirrorHorizontalButton = this.findViewById(R.id.mirrorHorizontalButton);
         this.mirrorVerticalButton = this.findViewById(R.id.mirrorVerticalButton);
-        this.cropButton = this.findViewById(R.id.cropButton);
-        //cropButton.setOnClickListener(this);
 
         OnClickListenerShare shareListener = new OnClickListenerShare();
         ArrayList<Uri> imageUris = new ArrayList<>();
@@ -83,7 +78,7 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
                 File imgFile = new File(message);
                 imageUris.add(Uri.parse(imgFile.getAbsolutePath()));
                 shareListener.setImageArray(imageUris);
-                //this.shareButton.setOnClickListener(shareListener);
+                this.shareButton.setOnClickListener(shareListener);
             }
         }
 
