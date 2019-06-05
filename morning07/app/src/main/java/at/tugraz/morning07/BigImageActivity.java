@@ -149,6 +149,9 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
                 Date lastModi = new Date(imgFile.lastModified());
                 intent.putExtra("date", lastModi.toString());
                 intent.putExtra("size", String.valueOf(imgFile.length() / 1024));
+                intent.putExtra("path", imgFile.getAbsolutePath());
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                intent.putExtra("resolution", myBitmap.getWidth() + " x " + myBitmap.getHeight());
                 startActivity(intent);
                 return true;
             }
