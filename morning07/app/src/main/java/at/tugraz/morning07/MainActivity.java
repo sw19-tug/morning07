@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -40,6 +41,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.AbsListView.OnScrollListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<File> photoFiles = new ArrayList<>();
     protected GridView photoGridView;
     protected PhotoAdapter photoAdapter;
+    private int firstItem;
 
     String takenPhotoPath;
 
@@ -208,15 +211,16 @@ public class MainActivity extends AppCompatActivity
                         break;
                 }
 
+
                 if(checked){
-                    ImageView tv = (ImageView) photoGridView.getChildAt(position);
-                    tv.setColorFilter(getResources().getColor(R.color.colorHighlighted));
                     photoAdapter.selectedPositions.add(position);
+                    ImageView tv = (ImageView) photoGridView.getChildAt(position-firstItem);
+                    tv.setColorFilter(getResources().getColor(R.color.colorHighlighted));
 
                 }else{
-                    ImageView tv = (ImageView) photoGridView.getChildAt(position);
-                    tv.setColorFilter(Color.TRANSPARENT);
                     photoAdapter.selectedPositions.remove(new Integer(position));
+                    ImageView tv = (ImageView) photoGridView.getChildAt(position-firstItem);
+                    tv.setColorFilter(Color.TRANSPARENT);
                 }
             }
 
@@ -261,13 +265,51 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDestroyActionMode(ActionMode mode) {
 
-                Log.v("MS",photoAdapter.selectedPositions.toString());
-                for(int i = 0; i < photoAdapter.selectedPositions.size(); i++)
+                photoAdapter.selectedPositions.clear();
+            }
+        });
+
+        photoGridView.setOnScrollListener( new OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                firstItem = firstVisibleItem;
+
+                List<Integer> tmp = new ArrayList<>();
+
+                for(int i = 0; i < visibleItemCount; i++)
                 {
-                    ImageView tv = (ImageView) photoGridView.getChildAt(photoAdapter.selectedPositions.get(i));
+                    ImageView tv = (ImageView) photoGridView.getChildAt(i);
                     tv.setColorFilter(Color.TRANSPARENT);
                 }
-                photoAdapter.selectedPositions.clear();
+
+
+                for(int i: photoAdapter.selectedPositions)
+                {
+                    if(i-firstVisibleItem >= 0)
+                    {
+                        ImageView tv = (ImageView) photoGridView.getChildAt(i-firstVisibleItem);
+                        if(i >= firstVisibleItem && i <= (firstVisibleItem + visibleItemCount))
+                        {
+                            if(!tmp.contains(new Integer(i)))
+                            {
+                                tv.setColorFilter(getResources().getColor(R.color.colorHighlighted));
+                                tmp.add(i);
+                            }
+
+                        }
+                        else
+                        {
+                            tmp.remove(new Integer(i));
+                        }
+                    }
+                }
+
             }
         });
     }
@@ -275,7 +317,6 @@ public class MainActivity extends AppCompatActivity
     public PhotoAdapter getPhotoAdapter() {
         return photoAdapter;
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -443,7 +484,13 @@ public class MainActivity extends AppCompatActivity
         for(int i = 0; i < photoAdapter.selectedPositions.size(); i++)
         {
             File imgFile = photoAdapter.getItem(photoAdapter.selectedPositions.get(i));
-            ImageView temp_view = (ImageView) photoGridView.getChildAt(photoAdapter.selectedPositions.get(i));
+
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
+            ImageView temp_view = new ImageView(this);
+
+            temp_view.setImageBitmap(myBitmap);
+
             temp_view.setRotation(turnRatio == 360 ? 0 : turnRatio);
             try {
                 bulkSave(temp_view, imgFile);
