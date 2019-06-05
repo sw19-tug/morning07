@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class BigImageActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -145,8 +146,9 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
             public boolean onLongClick(View v) {
                 Intent intent = new Intent(BigImageActivity.this, PopUp.class);
                 intent.putExtra("filename", imgFile.getName());
-                intent.putExtra("date", imgFile.lastModified());
-                intent.putExtra("size", imgFile.length());
+                Date lastModi = new Date(imgFile.lastModified());
+                intent.putExtra("date", lastModi.toString());
+                intent.putExtra("size", String.valueOf(imgFile.length() / 1024));
                 startActivity(intent);
                 return true;
             }

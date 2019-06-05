@@ -28,7 +28,7 @@ public class PopUp extends Activity {
         TextView tv_size = findViewById(R.id.size);
         String filename_text = "Filename: " + intent.getStringExtra("filename");
         String date_text = "Date: " + intent.getStringExtra("date");
-        String size_text = "Size: " + intent.getStringExtra("size");
+        String size_text = "Size: " + intent.getStringExtra("size") + " kb";
         tv_filename.setText(filename_text);
         tv_date.setText(date_text);
         tv_size.setText(size_text);
