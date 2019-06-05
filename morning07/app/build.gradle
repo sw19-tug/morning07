@@ -33,4 +33,5 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-intents:2.2') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
 }
