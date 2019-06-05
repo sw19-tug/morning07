@@ -25,28 +25,50 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:layout_marginEnd="17dp"
+        >
 
     <Button
         android:id="@+id/turnButton"
         android:text="turn"
-        android:layout_width="62dp"
-        android:layout_height="52dp"
-        android:layout_marginEnd="17dp"
-        tools:layout_editor_absoluteX="00dp"
-        tools:layout_editor_absoluteY="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="0dp"
         android:onClick="turn"
+        android:textSize="10sp"
+        />
+
+    <Button
+        android:id="@+id/cropButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="crop"
+        tools:layout_editor_absoluteX="140dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <Button
+        android:id="@+id/blackAndWhiteButton"
+        android:onClick="blackAndWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="Black and White"
+        android:layout_marginEnd="0dp"
+        android:textSize="10sp"
         />
 
     <Button
         android:id="@+id/saveButton"
-        android:layout_width="62dp"
-        android:layout_height="52dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:onClick="save"
         android:text="save"
-        tools:layout_editor_absoluteX="70dp"
-        tools:layout_editor_absoluteY="0dp"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_marginEnd="17dp"
+        android:textSize="10sp"/>
+
+
 
     </LinearLayout>
 
@@ -75,6 +97,41 @@
         android:visibility="visible"
         app:layout_constraintLeft_toRightOf="@+id/shareButton"
         tools:layout_editor_absoluteY="16dp" />
+
+
+    <Button
+        android:id="@+id/mirrorHorizontalButton"
+        style="@android:style/Widget.ImageButton"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:gravity="center|fill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
+        android:drawableStart="@drawable/ic_mirror_horizontal"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <Button
+        android:id="@+id/mirrorVerticalButton"
+        style="@android:style/Widget.ImageButton"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:gravity="center|fill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
+        android:drawableStart="@drawable/ic_mirror_vertical"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/mirrorHorizontalButton" />
+
 
 
 

@@ -2,22 +2,22 @@ package at.tugraz.morning07;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,16 +28,29 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class BigImageActivity extends AppCompatActivity {
+public class BigImageActivity extends AppCompatActivity implements View.OnClickListener {
+
+    final int CROPPING = 1;
+
+    enum MirrorDirection {
+        Horizontal,
+        Vertical
+    }
 
     int turnRatio = 0;
 
     private Button shareButton;
     private Button deleteButton;
     private Button saveButton;
-    private ImageView bigView;
+    protected ImageView bigView;
+    private Button mirrorHorizontalButton;
+    private Button mirrorVerticalButton;
+    private Button cropButton;
     private File imgFile;
+
+    private boolean saveAsNewFile = false;
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -53,6 +66,10 @@ public class BigImageActivity extends AppCompatActivity {
         this.shareButton = this.findViewById(R.id.shareButton);
         this.saveButton = this.findViewById(R.id.saveButton);
         this.deleteButton = this.findViewById(R.id.deleteButton);
+        this.mirrorHorizontalButton = this.findViewById(R.id.mirrorHorizontalButton);
+        this.mirrorVerticalButton = this.findViewById(R.id.mirrorVerticalButton);
+        this.cropButton = this.findViewById(R.id.cropButton);
+        cropButton.setOnClickListener(this);
 
         OnClickListenerShare shareListener = new OnClickListenerShare();
         ArrayList<Uri> imageUris = new ArrayList<>();
@@ -107,6 +124,41 @@ public class BigImageActivity extends AppCompatActivity {
             }
 
         });
+
+        this.mirrorHorizontalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            Bitmap bmp = ((BitmapDrawable)bigView.getDrawable()).getBitmap();
+            bigView.setImageBitmap(getMirroredBitmap(bmp, MirrorDirection.Horizontal));
+            }
+        });
+
+        this.mirrorVerticalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            Bitmap bmp = ((BitmapDrawable)bigView.getDrawable()).getBitmap();
+            bigView.setImageBitmap(getMirroredBitmap(bmp, MirrorDirection.Vertical));
+            }
+        });
+    }
+
+    private Bitmap getMirroredBitmap(Bitmap bmp, MirrorDirection direction) {
+        Matrix matrix = new Matrix();
+        if (direction == MirrorDirection.Horizontal) {
+            matrix.preScale(1.0f, -1.0f);
+        } else {
+            matrix.preScale(-1.0f, 1.0f);
+        }
+        if (saveButton.getVisibility() != View.VISIBLE) {
+            saveButton.setVisibility(View.VISIBLE);
+        }
+        return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
+    }
+
+    @Override
+    public void onClick(View v) {
+        crop();
+
     }
 
     @Override
@@ -125,6 +177,23 @@ public class BigImageActivity extends AppCompatActivity {
         else{
             bigView.setImageResource(R.drawable.prev2);
         }
+
+        bigView.setClickable(true);
+        bigView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(BigImageActivity.this, PopUp.class);
+                intent.putExtra("filename", imgFile.getName());
+                Date lastModi = new Date(imgFile.lastModified());
+                intent.putExtra("date", lastModi.toString());
+                intent.putExtra("size", String.valueOf(imgFile.length() / 1024));
+                intent.putExtra("path", imgFile.getAbsolutePath());
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                intent.putExtra("resolution", myBitmap.getWidth() + " x " + myBitmap.getHeight());
+                startActivity(intent);
+                return true;
+            }
+        });
     }
 
     public void turn(View view)
@@ -165,7 +234,21 @@ public class BigImageActivity extends AppCompatActivity {
         System.out.println("filepath: "+Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES));
 
-        FileOutputStream fos = new FileOutputStream(imgFile);
+        FileOutputStream fos;
+        File newFile;
+        if(saveAsNewFile) {
+            String str = imgFile.getName();
+            String[] arr = str.split("\\.");
+            String filename = arr[0];
+            for(int i = 1; i < arr.length - 1; i++)
+                filename += arr[i];
+            filename += "_" + System.currentTimeMillis() + "." + arr[arr.length - 1];
+            newFile = new File(imgFile.getParent() + File.pathSeparator + filename);
+            fos = new FileOutputStream(newFile);
+        }
+        else {
+            fos = new FileOutputStream(imgFile);
+        }
         Context context = getApplicationContext();
         CharSequence text;
         try {
@@ -173,13 +256,94 @@ public class BigImageActivity extends AppCompatActivity {
             fos.flush();
             fos.close();
             text = "Saved Successfully";
-
         }
         catch(IOException io) {
             text = "Error when Saving";
         }
+        saveAsNewFile = false;
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+        saveButton.setVisibility(View.INVISIBLE);
+    }
+
+    public void blackAndWhite(View view) throws Exception
+    {
+        saveButton.setVisibility(View.VISIBLE);
+        BitmapDrawable source = (BitmapDrawable)bigView.getDrawable();
+        Bitmap bm = Bitmap.createBitmap(source.getBitmap());
+        bigView.setImageDrawable(new BitmapDrawable(toGreyScale(bm)));
+        saveAsNewFile = true;
+    }
+
+    public static Bitmap toGreyScale(Bitmap src){
+        int width = src.getWidth();
+        int height = src.getHeight();
+        Bitmap result = Bitmap.createBitmap(width, height, src.getConfig());
+        int A, R, G, B;
+        int pixel;
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                pixel = src.getPixel(x, y);
+                A = Color.alpha(pixel);
+                R = Color.red(pixel);
+                G = Color.green(pixel);
+                B = Color.blue(pixel);
+                int gray = (R +  G + B) / 3;
+                result.setPixel(x, y, Color.argb(A, gray, gray, gray));
+            }
+        }
+        return result;
+    }
+
+    public void crop()
+    {
+        try
+        {
+            System.out.println("crop function");
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            cropIntent.setDataAndType(Uri.fromFile(imgFile), "image/*");
+            cropIntent.putExtra("crop", true);
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            cropIntent.putExtra("return-data", true);
+
+            startActivityForResult(cropIntent, CROPPING);
+        }
+        catch (Exception e) {
+            String errorM = "your device does not support crop!";
+            Toast toast = Toast.makeText(this, errorM, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        System.out.printf("onAcitvityResult %d", requestCode);
+        if (resultCode == RESULT_OK)
+        {
+            System.out.println("Result OK");
+            if (requestCode == CROPPING)
+            {
+                System.out.println("CROPPING");
+                Bundle extras = data.getExtras();
+                Bitmap cropped_pic = extras.getParcelable("data");
+                bigView.setImageBitmap(cropped_pic);
+                saveAsNewFile = true;
+                try
+                {
+                    save(null);
+                }
+                catch (Exception e)
+                {
+                    String errorM = "Could not save file!";
+                    System.out.printf("Exception: %s", e);
+                    Toast toast = Toast.makeText(this, errorM, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        }
     }
 }
