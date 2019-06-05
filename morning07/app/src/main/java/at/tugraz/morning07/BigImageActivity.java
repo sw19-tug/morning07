@@ -47,7 +47,7 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
     private Button mirrorHorizontalButton;
     private Button mirrorVerticalButton;
     private Button cropButton;
-    private File imgFile;
+    protected File imgFile;
 
     private boolean saveAsNewFile = false;
 
