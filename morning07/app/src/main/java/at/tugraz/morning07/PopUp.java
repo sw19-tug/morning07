@@ -20,7 +20,7 @@ public class PopUp extends Activity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width*.8), (int)(height*.7));
+        getWindow().setLayout((int)(width*.8), (int)(height*.60));
 
         Intent intent = getIntent();
         TextView tv_filename = findViewById(R.id.filename);
