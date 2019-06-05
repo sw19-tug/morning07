@@ -18,6 +18,8 @@ import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -69,7 +71,7 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
         this.mirrorHorizontalButton = this.findViewById(R.id.mirrorHorizontalButton);
         this.mirrorVerticalButton = this.findViewById(R.id.mirrorVerticalButton);
         this.cropButton = this.findViewById(R.id.cropButton);
-        cropButton.setOnClickListener(this);
+        //cropButton.setOnClickListener(this);
 
         OnClickListenerShare shareListener = new OnClickListenerShare();
         ArrayList<Uri> imageUris = new ArrayList<>();
@@ -81,49 +83,10 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
                 File imgFile = new File(message);
                 imageUris.add(Uri.parse(imgFile.getAbsolutePath()));
                 shareListener.setImageArray(imageUris);
-                this.shareButton.setOnClickListener(shareListener);
+                //this.shareButton.setOnClickListener(shareListener);
             }
         }
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                //Yes button clicked
-                                if(imgFile.exists())
-                                {
-                                    boolean success = imgFile.delete();
-                                    if(success)
-                                    {
-                                        Intent intent = new Intent(BigImageActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                    }
-                                    else
-                                    {
-                                        Toast.makeText(getApplicationContext(), "file could not be deleted!",Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-
-                                break;
-
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
-                                dialog.cancel();
-                                break;
-                        }
-                    }
-                };
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(BigImageActivity.this);
-                builder.setTitle(R.string.delete_dialog_title).setMessage("Are you sure?").setNegativeButton("No", dialogClickListener)
-                        .setPositiveButton("Yes", dialogClickListener)
-                        .show();
-            }
-
-        });
 
         this.mirrorHorizontalButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +159,45 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
-    public void turn(View view)
+    public void deletePicture() {
+    final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    //Yes button clicked
+                    if(imgFile.exists())
+                    {
+                        boolean success = imgFile.delete();
+                        if(success)
+                        {
+                            Intent intent = new Intent(BigImageActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(), "file could not be deleted!",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    //No button clicked
+                    dialog.cancel();
+                    break;
+            }
+        }
+    };
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(BigImageActivity.this);
+    builder.setTitle(R.string.delete_dialog_title).setMessage("Are you sure?").setNegativeButton("No", dialogClickListener)
+            .setPositiveButton("Yes", dialogClickListener)
+            .show();
+
+    }
+
+    public void turn()
     {
         saveButton.setVisibility(View.VISIBLE);
         //ImageView bigView = (ImageView) findViewById(R.id.big_image);
@@ -267,7 +268,7 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
         saveButton.setVisibility(View.INVISIBLE);
     }
 
-    public void blackAndWhite(View view) throws Exception
+    public void blackAndWhite()
     {
         saveButton.setVisibility(View.VISIBLE);
         BitmapDrawable source = (BitmapDrawable)bigView.getDrawable();
@@ -294,6 +295,32 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
             }
         }
         return result;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.big_image_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case(R.id.deleteButton):
+                deletePicture();
+                break;
+            case(R.id.cropButton):
+                crop();
+                break;
+            case(R.id.blackAndWhiteButton):
+                blackAndWhite();
+                break;
+            case(R.id.turnButton):
+                turn();
+                break;
+        }
+
+        return true;
     }
 
     public void crop()
