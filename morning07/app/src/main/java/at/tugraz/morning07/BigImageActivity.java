@@ -34,13 +34,20 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
 
     final int CROPPING = 1;
 
+    enum MirrorDirection {
+        Horizontal,
+        Vertical
+    }
+
     int turnRatio = 0;
 
     private Button shareButton;
     private Button deleteButton;
     private Button saveButton;
+    protected ImageView bigView;
+    private Button mirrorHorizontalButton;
+    private Button mirrorVerticalButton;
     private Button cropButton;
-    private ImageView bigView;
     private File imgFile;
 
     private boolean saveAsNewFile = false;
@@ -59,6 +66,8 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
         this.shareButton = this.findViewById(R.id.shareButton);
         this.saveButton = this.findViewById(R.id.saveButton);
         this.deleteButton = this.findViewById(R.id.deleteButton);
+        this.mirrorHorizontalButton = this.findViewById(R.id.mirrorHorizontalButton);
+        this.mirrorVerticalButton = this.findViewById(R.id.mirrorVerticalButton);
         this.cropButton = this.findViewById(R.id.cropButton);
         cropButton.setOnClickListener(this);
 
@@ -115,6 +124,35 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
             }
 
         });
+
+        this.mirrorHorizontalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            Bitmap bmp = ((BitmapDrawable)bigView.getDrawable()).getBitmap();
+            bigView.setImageBitmap(getMirroredBitmap(bmp, MirrorDirection.Horizontal));
+            }
+        });
+
+        this.mirrorVerticalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            Bitmap bmp = ((BitmapDrawable)bigView.getDrawable()).getBitmap();
+            bigView.setImageBitmap(getMirroredBitmap(bmp, MirrorDirection.Vertical));
+            }
+        });
+    }
+
+    private Bitmap getMirroredBitmap(Bitmap bmp, MirrorDirection direction) {
+        Matrix matrix = new Matrix();
+        if (direction == MirrorDirection.Horizontal) {
+            matrix.preScale(1.0f, -1.0f);
+        } else {
+            matrix.preScale(-1.0f, 1.0f);
+        }
+        if (saveButton.getVisibility() != View.VISIBLE) {
+            saveButton.setVisibility(View.VISIBLE);
+        }
+        return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, false);
     }
 
     @Override
@@ -226,6 +264,7 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+        saveButton.setVisibility(View.INVISIBLE);
     }
 
     public void blackAndWhite(View view) throws Exception

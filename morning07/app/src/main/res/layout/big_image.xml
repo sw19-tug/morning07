@@ -97,6 +97,40 @@
         tools:layout_editor_absoluteY="16dp" />
 
 
+    <Button
+        android:id="@+id/mirrorHorizontalButton"
+        style="@android:style/Widget.ImageButton"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:gravity="center|fill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
+        android:drawableStart="@drawable/ic_mirror_horizontal"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <Button
+        android:id="@+id/mirrorVerticalButton"
+        style="@android:style/Widget.ImageButton"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:gravity="center|fill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
+        android:drawableStart="@drawable/ic_mirror_vertical"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/mirrorHorizontalButton" />
+
+
 
 
 </android.support.constraint.ConstraintLayout>
