@@ -8,8 +8,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
@@ -29,16 +31,17 @@ public class DeletePictureEspressoTest {
     public void isVisibleDeleteButton(){
 
         onData(anything()).inAdapterView(withId(R.id.photoGridView)).atPosition(0).perform(click());
-
-        onView(withId(R.id.deleteButton)).check(matches(isDisplayed()));
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Delete")).check(matches(isDisplayed()));
     }
 
     @Test
     public void dialogShow(){
         onData(anything()).inAdapterView(withId(R.id.photoGridView)).atPosition(0).perform(click());
 
-        onView(withId(R.id.deleteButton)).check(matches(isDisplayed()));
-        onView(withId(R.id.deleteButton)).check(matches(isDisplayed())).perform(click());
+
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Delete")).check(matches(isDisplayed())).perform(click());
         onView(withText(R.string.delete_dialog_title)).inRoot(isDialog()).check(matches(isDisplayed()));
     }
 }
