@@ -57,7 +57,28 @@ public class MapPinEspressoTest {
 
     @Test
     public void ShowMapPinView() {
-            onView(withId(R.id.mapView)).check(matches(isDisplayed()));
+
+        File imgFile = activityRule.getActivity().imgFile;
+
+        try {
+
+            ExifInterface exifInterface = new ExifInterface(imgFile.getAbsolutePath());
+
+            final String latitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+            final String longitude = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+
+            if (latitude != null && longitude != null) {
+                onView(withId(R.id.showOnMapButton)).check(matches(isDisplayed())).perform(click());
+                onView(withId(R.id.mapView)).check(matches(isDisplayed()));
+            }
+            else{
+                onView(withId(R.id.showOnMapButton)).check(matches(isDisplayed())).perform(click());
+                onView(withId(R.id.mapView)).check(matches(not(isDisplayed())));
+            }
+
+        } catch (Exception e) {
+
+        }
+
     }
 }
-
