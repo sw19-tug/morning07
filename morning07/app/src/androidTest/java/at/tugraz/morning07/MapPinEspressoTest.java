@@ -57,12 +57,7 @@ public class MapPinEspressoTest {
 
     @Test
     public void ShowMapPinView() {
-
-        onData(anything()).inAdapterView(withId(R.id.mapView)).atPosition(0).perform(click());
-
-        onView(withId(R.id.showOnMapButton)).check(matches(isDisplayed()));
-        onView(withId(R.id.showOnMapButton)).check(matches(isDisplayed())).perform(click());
-        onView(withId(R.id.mapView)).inRoot(isDialog()).check(matches(isDisplayed()));
+            onView(withId(R.id.mapView)).check(matches(isDisplayed()));
     }
 }
 
