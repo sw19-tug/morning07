@@ -7,12 +7,14 @@ import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 
 public class TurnPictureEspressoTest {
@@ -25,30 +27,37 @@ public class TurnPictureEspressoTest {
 
     @Test
     public void testTurnButtonVisible() {
-        onView(withId(R.id.turnButton)).check(matches(isDisplayed()));
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Turn")).check(matches(isDisplayed()));
     }
 
     @Test
     public void testTurnButtonWorks(){
-        onView(withId(R.id.turnButton)).perform(click());
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Turn")).check(matches(isDisplayed())).perform(click());
         onView(withId(R.id.big_image)).check(matches(withRotation(90)));
     }
     @Test
     public void testFullRotation(){
-        onView(withId(R.id.turnButton)).perform(click());
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Turn")).check(matches(isDisplayed())).perform(click());
         onView(withId(R.id.big_image)).check(matches(withRotation(90)));
-        onView(withId(R.id.turnButton)).perform(click());
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Turn")).check(matches(isDisplayed())).perform(click());
         onView(withId(R.id.big_image)).check(matches(withRotation(180)));
-        onView(withId(R.id.turnButton)).perform(click());
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Turn")).check(matches(isDisplayed())).perform(click());
         onView(withId(R.id.big_image)).check(matches(withRotation(270)));
-        onView(withId(R.id.turnButton)).perform(click());
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Turn")).check(matches(isDisplayed())).perform(click());
         onView(withId(R.id.big_image)).check(matches(withRotation(0)));
     }
 
     @Test
     public void testSaveButtonVisible(){
         onView(withId(R.id.saveButton)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.turnButton)).perform(click());
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Turn")).check(matches(isDisplayed())).perform(click());
         onView(withId(R.id.saveButton)).check(matches(isDisplayed()));
     }
 }

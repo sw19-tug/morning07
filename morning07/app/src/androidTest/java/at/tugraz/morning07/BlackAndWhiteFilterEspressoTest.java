@@ -7,11 +7,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 
 /**
@@ -26,13 +29,15 @@ public class BlackAndWhiteFilterEspressoTest {
 
     @Test
     public void testBlackAndWhiteButtonVisible() {
-        onView(withId(R.id.blackAndWhiteButton)).check(matches(isDisplayed()));
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Black and White")).check(matches(isDisplayed()));
     }
 
     @Test
     public void testSaveButtonVisible(){
         onView(withId(R.id.saveButton)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.blackAndWhiteButton)).perform(click());
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withText("Black and White")).check(matches(isDisplayed())).perform(click());
         onView(withId(R.id.saveButton)).check(matches(isDisplayed()));
     }
 }

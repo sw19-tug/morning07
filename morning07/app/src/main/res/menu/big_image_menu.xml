@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/deleteButton"
+        android:title="Delete" />
+    <item android:id="@+id/turnButton"
+        android:title="Turn" />
+    <item android:id="@+id/cropButton"
+        android:title="Crop" />
+    <item android:id="@+id/blackAndWhiteButton"
+        android:title="Black and White" />
+</menu>
