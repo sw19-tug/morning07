@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -47,7 +48,8 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
     protected ImageView bigView;
     private Button mirrorHorizontalButton;
     private Button mirrorVerticalButton;
-    private File imgFile;
+    private Button showOnMapButton;
+    protected File imgFile;
 
     private boolean saveAsNewFile = false;
 
@@ -62,6 +64,7 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.big_image);
 
+        this.bigView = (ImageView) findViewById(R.id.big_image);
         this.shareButton = this.findViewById(R.id.shareButton);
         this.saveButton = this.findViewById(R.id.saveButton);
         this.mirrorHorizontalButton = this.findViewById(R.id.mirrorHorizontalButton);
@@ -74,13 +77,21 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
         if(intent != null){
             String message = intent.getStringExtra("filepath");
             if(message != null) {
-                File imgFile = new File(message);
-                imageUris.add(Uri.parse(imgFile.getAbsolutePath()));
-                shareListener.setImageArray(imageUris);
-                this.shareButton.setOnClickListener(shareListener);
+                imgFile = new File(message);
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                bigView.setImageBitmap(myBitmap);
             }
         }
+        else{
+            bigView.setImageResource(R.drawable.prev2);
+        }
 
+        this.shareButton = this.findViewById(R.id.shareButton);
+        this.saveButton = this.findViewById(R.id.saveButton);
+        this.mirrorHorizontalButton = this.findViewById(R.id.mirrorHorizontalButton);
+        this.mirrorVerticalButton = this.findViewById(R.id.mirrorVerticalButton);
+
+        this.showOnMapButton = this.findViewById(R.id.showOnMapButton);
 
         this.mirrorHorizontalButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +108,40 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
             bigView.setImageBitmap(getMirroredBitmap(bmp, MirrorDirection.Vertical));
             }
         });
+
+        setUpMapButton();
+
+    }
+
+    private void setUpMapButton() {
+
+        try {
+
+            ExifInterface exifInterface = new ExifInterface(imgFile.getPath());
+
+            float[] latLng = new float[2];
+            if (exifInterface.getLatLong(latLng)) {
+
+                final float[] location = latLng;
+
+                this.showOnMapButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent showOnMapIntent = new Intent(BigImageActivity.this, MapActivity.class);
+                        showOnMapIntent.putExtra("latitude", location[0]);
+                        showOnMapIntent.putExtra("longitude", location[1]);
+                        startActivity(showOnMapIntent);
+                    }
+                });
+
+            } else {
+                this.showOnMapButton.setVisibility(View.INVISIBLE);
+            }
+
+        } catch (Exception e) {
+            System.out.println("[DEBUG SS] " + e.getLocalizedMessage());
+        }
+
     }
 
     private Bitmap getMirroredBitmap(Bitmap bmp, MirrorDirection direction) {

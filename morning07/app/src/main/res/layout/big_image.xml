@@ -84,4 +84,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/mirrorHorizontalButton" />
 
+    <Button
+        android:id="@+id/showOnMapButton"
+        style="@android:style/Widget.ImageButton"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:gravity="center|fill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
+        android:drawableStart="@drawable/ic_map"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/mirrorVerticalButton" />
+
 </android.support.constraint.ConstraintLayout>
