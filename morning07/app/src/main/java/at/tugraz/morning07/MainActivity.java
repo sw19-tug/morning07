@@ -337,6 +337,35 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        SortImages sortImages = new SortImages();
+        ArrayList<File> sortedFiles = new ArrayList<>();
+        switch (item.getItemId()) {
+            case R.id.menu_sort_name:
+                sortedFiles = sortImages.sortByName(photoFiles);
+                photoFiles = sortedFiles;
+                setupPhotoGridView();
+                Toast.makeText(getApplicationContext(), "Sorted By Name",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.menu_sort_date:
+                sortedFiles = sortImages.sortByDate(photoFiles);
+                photoFiles = sortedFiles;
+                setupPhotoGridView();
+                Toast.makeText(getApplicationContext(), "Sorted By Date",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.menu_sort_size:
+                sortedFiles = sortImages.sortByFileSize(photoFiles);
+                photoFiles = sortedFiles;
+                setupPhotoGridView();
+                Toast.makeText(getApplicationContext(), "Sorted By Size",Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);

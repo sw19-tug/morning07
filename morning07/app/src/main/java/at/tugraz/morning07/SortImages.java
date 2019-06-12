@@ -2,14 +2,14 @@ package at.tugraz.morning07;
 
 import java.io.File;
 import java.util.List;
-
+import java.util.ArrayList;
 
 public class SortImages {
 
     public SortImages() {
     }
 
-    public List<File> sortByName(List<File> imageArrayToSort)
+    public ArrayList<File> sortByName(ArrayList<File> imageArrayToSort)
     {
         for (int i = 0; i<imageArrayToSort.size() - 1; i++)
         {
@@ -27,7 +27,7 @@ public class SortImages {
         return imageArrayToSort;
     }
 
-    public List<File> sortByDate(List<File> imageArrayToSort)
+    public ArrayList<File> sortByDate(ArrayList<File> imageArrayToSort)
     {
         for (int i = 0; i<imageArrayToSort.size() - 1; i++)
         {
@@ -44,7 +44,7 @@ public class SortImages {
         return imageArrayToSort;
     }
 
-    public List<File> sortByFileSize(List<File> imageArrayToSort)
+    public ArrayList<File> sortByFileSize(ArrayList<File> imageArrayToSort)
     {
         for (int i = 0; i<imageArrayToSort.size() - 1; i++)
         {
