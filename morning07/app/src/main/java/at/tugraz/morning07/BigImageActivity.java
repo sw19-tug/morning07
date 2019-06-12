@@ -49,8 +49,8 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
     private Button mirrorHorizontalButton;
     private Button mirrorVerticalButton;
     private Button showOnMapButton;
-    private Button cropButton;
     protected File imgFile;
+
     private boolean saveAsNewFile = false;
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -65,6 +65,14 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.big_image);
 
         this.bigView = (ImageView) findViewById(R.id.big_image);
+        this.shareButton = this.findViewById(R.id.shareButton);
+        this.saveButton = this.findViewById(R.id.saveButton);
+        this.mirrorHorizontalButton = this.findViewById(R.id.mirrorHorizontalButton);
+        this.mirrorVerticalButton = this.findViewById(R.id.mirrorVerticalButton);
+
+        OnClickListenerShare shareListener = new OnClickListenerShare();
+        ArrayList<Uri> imageUris = new ArrayList<>();
+        File f = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         Intent intent = getIntent();
         if(intent != null){
             String message = intent.getStringExtra("filepath");
