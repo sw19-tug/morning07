@@ -1,6 +1,7 @@
 package at.tugraz.morning07;
 
 import android.media.ExifInterface;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.ImageView;
@@ -11,10 +12,15 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.Matchers.not;
 
 
@@ -49,5 +55,14 @@ public class MapPinEspressoTest {
 
     }
 
+    @Test
+    public void ShowMapPinView() {
+
+        onData(anything()).inAdapterView(withId(R.id.mapView)).atPosition(0).perform(click());
+
+        onView(withId(R.id.showOnMapButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.showOnMapButton)).check(matches(isDisplayed())).perform(click());
+        onView(withId(R.id.mapView)).inRoot(isDialog()).check(matches(isDisplayed()));
+    }
 }
 
