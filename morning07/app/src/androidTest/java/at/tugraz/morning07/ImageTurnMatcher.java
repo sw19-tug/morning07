@@ -1,6 +1,5 @@
 package at.tugraz.morning07;
 
-import android.media.Image;
 import android.view.View;
 import android.widget.ImageView;
 

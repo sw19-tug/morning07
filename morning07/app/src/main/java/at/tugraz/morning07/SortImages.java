@@ -1,7 +1,6 @@
 package at.tugraz.morning07;
 
 import java.io.File;
-import java.util.List;
 import java.util.ArrayList;
 
 public class SortImages {
