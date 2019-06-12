@@ -1,7 +1,5 @@
 package at.tugraz.morning07;
 
-import android.media.Image;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,16 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-
 
 public class SortUnitTest{
 
@@ -28,10 +19,10 @@ public class SortUnitTest{
     FileMock image2 = new FileMock("xkl", "Max", new Date(), 2000);
 
     //ToDo sorting arrays
-    List<File> imageList;
-    List<File>  sortedbyNameList;
-    List<File>  sortedbyDateList;
-    List<File> sortedbyFileSizeList;
+    ArrayList<File> imageList;
+    ArrayList<File>  sortedbyNameList;
+    ArrayList<File>  sortedbyDateList;
+    ArrayList<File> sortedbyFileSizeList;
 
     @Before
     public void setUp() throws IOException {

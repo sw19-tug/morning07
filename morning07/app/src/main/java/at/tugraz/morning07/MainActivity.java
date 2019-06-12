@@ -5,33 +5,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.icu.text.Normalizer2;
-import android.media.Image;
-import android.os.Debug;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ActionMode;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -46,12 +35,11 @@ import android.widget.AbsListView.OnScrollListener;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import android.net.Uri;
-import android.widget.Button;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -130,17 +118,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private boolean isImageFile(File file) {
-        return (file.getAbsolutePath().endsWith(".bmp") ||
-                file.getAbsolutePath().endsWith(".gif") ||
-                file.getAbsolutePath().endsWith(".jpg") ||
-                file.getAbsolutePath().endsWith(".jpeg") ||
-                file.getAbsolutePath().endsWith(".png") ||
-                file.getAbsolutePath().endsWith(".webp"));
+        String mimeType = URLConnection.guessContentTypeFromName(file.getAbsolutePath());
+        return mimeType != null && mimeType.startsWith("image");
     }
 
     public ArrayList<File> getPhotoFiles(File dir) {
         ArrayList<File> files = new ArrayList<File>();
-        if (dir != null && dir.isDirectory()) {
+        if (dir != null && dir.isDirectory() && dir.listFiles() != null) {
             for (File file : dir.listFiles()) {
                 if (file.isDirectory()) {
                     files.addAll(getPhotoFiles(file));

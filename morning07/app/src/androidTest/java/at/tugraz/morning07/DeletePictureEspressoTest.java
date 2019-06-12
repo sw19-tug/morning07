@@ -2,7 +2,6 @@ package at.tugraz.morning07;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.widget.GridView;
 
 import org.junit.Rule;
 import org.junit.Test;

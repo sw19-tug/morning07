@@ -2,7 +2,6 @@ package at.tugraz.morning07;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
