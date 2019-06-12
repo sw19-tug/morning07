@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -46,6 +47,7 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
     protected ImageView bigView;
     private Button mirrorHorizontalButton;
     private Button mirrorVerticalButton;
+    private Button showOnMapButton;
     private Button cropButton;
     protected File imgFile;
 
@@ -62,18 +64,33 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.big_image);
 
+        this.bigView = (ImageView) findViewById(R.id.big_image);
+        Intent intent = getIntent();
+        if(intent != null){
+            String message = intent.getStringExtra("filepath");
+            if(message != null) {
+                imgFile = new File(message);
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                bigView.setImageBitmap(myBitmap);
+            }
+        }
+        else{
+            bigView.setImageResource(R.drawable.prev2);
+        }
+
         this.shareButton = this.findViewById(R.id.shareButton);
         this.saveButton = this.findViewById(R.id.saveButton);
         this.deleteButton = this.findViewById(R.id.deleteButton);
         this.mirrorHorizontalButton = this.findViewById(R.id.mirrorHorizontalButton);
         this.mirrorVerticalButton = this.findViewById(R.id.mirrorVerticalButton);
+        this.showOnMapButton = this.findViewById(R.id.showOnMapButton);
         this.cropButton = this.findViewById(R.id.cropButton);
         cropButton.setOnClickListener(this);
 
         OnClickListenerShare shareListener = new OnClickListenerShare();
         ArrayList<Uri> imageUris = new ArrayList<>();
         File f = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        Intent intent = getIntent();
+        //Intent intent = getIntent();
         if(intent != null){
             String message = intent.getStringExtra("filepath");
             if(message != null) {
@@ -139,6 +156,40 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
             bigView.setImageBitmap(getMirroredBitmap(bmp, MirrorDirection.Vertical));
             }
         });
+
+        setUpMapButton();
+
+    }
+
+    private void setUpMapButton() {
+
+        try {
+
+            ExifInterface exifInterface = new ExifInterface(imgFile.getPath());
+
+            float[] latLng = new float[2];
+            if (exifInterface.getLatLong(latLng)) {
+
+                final float[] location = latLng;
+
+                this.showOnMapButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent showOnMapIntent = new Intent(BigImageActivity.this, MapActivity.class);
+                        showOnMapIntent.putExtra("latitude", location[0]);
+                        showOnMapIntent.putExtra("longitude", location[1]);
+                        startActivity(showOnMapIntent);
+                    }
+                });
+
+            } else {
+                this.showOnMapButton.setVisibility(View.INVISIBLE);
+            }
+
+        } catch (Exception e) {
+            System.out.println("[DEBUG SS] " + e.getLocalizedMessage());
+        }
+
     }
 
     private Bitmap getMirroredBitmap(Bitmap bmp, MirrorDirection direction) {
@@ -163,19 +214,7 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onStart() {
         super.onStart();
-        this.bigView = (ImageView) findViewById(R.id.big_image);
-        Intent intent = getIntent();
-        if(intent != null){
-            String message = intent.getStringExtra("filepath");
-            if(message != null) {
-                imgFile = new File(message);
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                bigView.setImageBitmap(myBitmap);
-            }
-        }
-        else{
-            bigView.setImageResource(R.drawable.prev2);
-        }
+
     }
 
     public void turn(View view)
