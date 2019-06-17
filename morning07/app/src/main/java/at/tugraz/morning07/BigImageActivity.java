@@ -80,16 +80,14 @@ public class BigImageActivity extends AppCompatActivity implements View.OnClickL
                 imgFile = new File(message);
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 bigView.setImageBitmap(myBitmap);
+                imageUris.add(Uri.parse(imgFile.getAbsolutePath()));
+                shareListener.setImageArray(imageUris);
+                this.shareButton.setOnClickListener(shareListener);
             }
         }
         else{
             bigView.setImageResource(R.drawable.prev2);
         }
-
-        this.shareButton = this.findViewById(R.id.shareButton);
-        this.saveButton = this.findViewById(R.id.saveButton);
-        this.mirrorHorizontalButton = this.findViewById(R.id.mirrorHorizontalButton);
-        this.mirrorVerticalButton = this.findViewById(R.id.mirrorVerticalButton);
 
         this.showOnMapButton = this.findViewById(R.id.showOnMapButton);
 
