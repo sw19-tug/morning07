@@ -15,7 +15,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 public class OverviewEspressoTest {
     @Rule
-    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<BigImageActivity> activityRule = new ActivityTestRule<>(BigImageActivity.class);
     @Test
     public void testImageIsVisible() {
         onView(withId(R.id.big_image)).check(matches(isDisplayed()));

@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -20,18 +20,84 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:src="@drawable/index" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        >
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:onClick="save"
+        android:text="save"
+        android:visibility="invisible"
+        android:textSize="10sp"/>
     </LinearLayout>
 
     <Button
         android:id="@+id/shareButton"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:layout_marginEnd="17dp"
         android:contentDescription="sha"
         android:drawableEnd="@android:drawable/ic_menu_share"
-        android:gravity="center_horizontal|top"
+        android:gravity="right"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="16dp" />
+
+
+    <Button
+        android:id="@+id/mirrorHorizontalButton"
+        style="@android:style/Widget.ImageButton"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:gravity="center|fill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
+        android:drawableStart="@drawable/ic_mirror_horizontal"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <Button
+        android:id="@+id/mirrorVerticalButton"
+        style="@android:style/Widget.ImageButton"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:gravity="center|fill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
+        android:drawableStart="@drawable/ic_mirror_vertical"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/mirrorHorizontalButton" />
+
+    <Button
+        android:id="@+id/showOnMapButton"
+        style="@android:style/Widget.ImageButton"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:gravity="center|fill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
+        android:drawableStart="@drawable/ic_map"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/mirrorVerticalButton" />
 
 </android.support.constraint.ConstraintLayout>

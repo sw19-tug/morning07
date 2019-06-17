@@ -12,12 +12,13 @@ import java.io.File;
 import java.util.ArrayList;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
@@ -54,19 +55,15 @@ public class MainActivityEspressoTest
     }
 
     @Test
-    public void checkFilePaths()
+    public void checkSearch()
     {
+        String test_query = "asdf";
         ArrayList<File> photoFiles = activityRule.getActivity().getAllPhotoFiles();
-        ArrayList<String> photoFilesPaths = activityRule.getActivity().getPhotoFilesPaths(photoFiles);
-        assertThat("Photo file paths must not be null.", photoFilesPaths != null);
-    }
 
-    @Test
-    public void checkFilePathsIfImages()
-    {
-        ArrayList<File> photoFiles = activityRule.getActivity().getAllPhotoFiles();
-        for (File img: photoFiles) {
-            assertThat("An file in photoFiles is no image file!", activityRule.getActivity().testIsImageFile(img));
+        onView(withId(R.id.search_images)).perform(click()).perform(typeText(test_query));
+        for (File f : activityRule.getActivity().getPhotoAdapter().getFilteredImageList())
+        {
+            assertTrue(f.getName().toLowerCase().trim().contains(test_query.toLowerCase().trim()));
         }
     }
 }
